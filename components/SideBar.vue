@@ -14,7 +14,6 @@
 const openSide = useState('sideMenu', () => false);
 
 const style = computed(() => {
-  console.log('toggle')
   return {
     width: openSide.value ? '150px' : '0px',
   }

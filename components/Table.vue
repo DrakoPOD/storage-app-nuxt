@@ -1,13 +1,10 @@
 <template>
   <div class="containerTable">
-
     <table>
       <thead>
-
         <tr>
           <th v-for="header in sampleHeaders" :key="header.text">
             <div class="flex">
-
               <p>{{ header.text }}</p>
               <menu-down-icon :size="28" />
             </div>
@@ -15,7 +12,6 @@
         </tr>
       </thead>
       <tbody>
-
         <tr v-for="data in sampleData" :key="data.id">
           <td>{{ data.id }}</td>
           <td>{{ data.name }}</td>
@@ -34,6 +30,7 @@ const sampleData = ref([
   { id: 1, name: 'John Doe', age: 30 },
   { id: 2, name: 'Jane Doe', age: 25 },
 ])
+
 const sampleHeaders = ref([
   { text: 'ID', value: 'id' },
   { text: 'Name', value: 'name' },
