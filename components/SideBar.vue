@@ -1,12 +1,16 @@
 <template>
   <div class="sideBar" :style="style">
-    <ul>
-      <li>list 1</li>
-      <li>list 2</li>
-      <li>list 3</li>
-      <li>list 4</li>
-      <li>list 5</li>
-    </ul>
+    <nav>
+      <NuxtLink to="/" class="linkItem">
+        Home
+      </NuxtLink>
+      <NuxtLink to="/itemList" class="linkItem">
+        Inventario
+      </NuxtLink>
+      <NuxtLink to="addItemView" class="linkItem">
+        Añadir
+      </NuxtLink>
+    </nav>
   </div>
 </template>
 
@@ -20,7 +24,7 @@ const style = computed(() => {
 })
 </script>
 
-<style>
+<style scoped>
 .sideBar {
   flex-shrink: 0;
   width: 0px;
@@ -33,5 +37,20 @@ const style = computed(() => {
 
 ul {
   width: 150px;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  list-style: none;
+  justify-content: space-around;
+}
+
+.linkItem {
+  text-decoration: none;
+  color: black;
+  padding: 5px;
+  transition: .2s;
 }
 </style>

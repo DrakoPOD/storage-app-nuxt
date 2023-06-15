@@ -1,4 +1,10 @@
 {
   // https://nuxt.com/docs/guide/concepts/typescript
+  "compilerOptions": {
+    // "allowSyntheticDefaultImports": true,
+    "paths": {
+      "@/types/*": ["./types/*.d.ts"]
+    }
+  },
   "extends": "./.nuxt/tsconfig.json"
 }

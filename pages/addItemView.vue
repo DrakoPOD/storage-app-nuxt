@@ -1,3 +1,3 @@
 <template>
-  I'm a template
+  <AddItem />
 </template>

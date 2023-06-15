@@ -1,35 +1,21 @@
 import { MongoClient } from 'mongodb';
-
 import { databaseNames } from '../utils/constantVars';
 
-import type { IQuery } from '@/types/api';
+// TODO: edit this type
+import type { Body } from '@/types/api';
 
 const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/';
 
 export default defineEventHandler(async (event) => {
+  const data = await readBody<any>(event);
   const client = new MongoClient(uri);
-  const query = getQuery(event) as IQuery;
 
-  let findQuery: object;
-
-  //check if query is empty
-  if (Object.keys(query).length === 0) {
-    return Promise.reject('Invalid query');
-  }
-
-  // check if query has id
-  if (query.id) {
-    findQuery = { _id: query.id };
-  } else {
-    findQuery = query;
-  }
-
-  const { database, collection } = databaseNames['item'];
+  const { database, collection } = databaseNames['manufacturer'];
 
   try {
     const mongoDB = await client.db(database);
     const coll = await mongoDB.collection(collection);
-    let result = await coll.findOne(findQuery);
+    let result = await coll.insertOne(data);
 
     return Promise.resolve(result);
   } catch (error) {

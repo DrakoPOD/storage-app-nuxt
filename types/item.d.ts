@@ -1,5 +1,8 @@
-interface Manufacturer {
-  _id?: string;
+import type { ObjectId } from 'mongodb';
+
+export interface Manufacturer {
+  _id?: ObjectId;
+  logo?: string;
   name: string;
   description: string;
   country: string;
@@ -21,20 +24,22 @@ interface StorageCondition {
 }
 
 interface Item {
-  _id?: string;
+  _id?: ObjectId;
   serialNumber?: string;
+  image?: string;
   name: string;
   description: string;
   quantity: number;
   cost: number;
   addedDate: Date;
   brand: string;
-  manufacturer: Manufacturer;
-  storageCondition: StorageCondition;
+  manufacturer: Manufacturer | object | string | null;
+  storageCondition?: StorageCondition | object;
   category: string;
   laboratory: string;
   topic: string;
   experiments: string[];
+  code?: string;
 }
 
 export interface PhysicsItem extends Item {

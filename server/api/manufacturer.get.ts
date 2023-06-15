@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
     findQuery = query;
   }
 
-  const { database, collection } = databaseNames['item'];
+  const { database, collection } = databaseNames['manufacturer'];
 
   try {
     const mongoDB = await client.db(database);

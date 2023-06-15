@@ -1,4 +1,7 @@
 <template>
+  <NuxtLayout name="modal" v-if="openModal">
+    <NuxtLayout :name="modalName" />
+  </NuxtLayout>
   <div id="wrapper">
     <SideBar />
     <div id="container">
@@ -9,7 +12,8 @@
 </template>
 
 <script setup lang="ts">
-
+const modalName = useState<string>('modal', () => 'add-manufacturer')
+const openModal = useState<boolean>('open-modal', () => false)
 </script>
 
 <style>

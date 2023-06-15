@@ -1,5 +1,7 @@
-import { describe, test, expect, it } from 'vitest';
+import { describe, test, expect } from 'vitest';
 import { setup, $fetch } from '@nuxt/test-utils';
+
+import { useGet } from '../composables/apiMethods';
 
 describe('My test', async () => {
   await setup({
@@ -7,10 +9,13 @@ describe('My test', async () => {
   });
 
   test('test GET', async () => {
-    const response = await $fetch(
-      '/api/item?collection=test&database=test&query={"name":"Pedro"}'
-    );
+    const response = await $fetch('/api/item', {
+      method: 'GET',
+      query: {
+        name: 'asdsd',
+      },
+    });
 
-    expect(response.name).toBe('Pedro');
+    expect(response.name).toBe('asdsd');
   });
 });

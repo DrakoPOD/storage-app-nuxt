@@ -1,5 +1,9 @@
 <template>
   <div>
-    <Table />
+    <Table/>
   </div>
 </template>
+
+<script setup lang="ts">
+
+</script>

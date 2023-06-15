@@ -11,13 +11,26 @@
   },
   "devDependencies": {
     "@nuxt/test-utils": "^3.5.2",
+    "@types/bcrypt": "^5.0.0",
+    "@types/inputmask": "^5.0.3",
     "@types/node": "^18",
+    "@types/passport": "^1.0.12",
+    "@types/passport-local": "^1.0.35",
+    "jsdom": "^22.1.0",
     "nuxt": "^3.5.2",
-    "vitest": "^0.31.3",
-    "vue": "^3.3.4"
+    "playwright": "^1.35.0",
+    "vitest": "^0.31.3"
   },
   "dependencies": {
+    "@types/multer": "^1.4.7",
+    "@vueuse/core": "^10.1.2",
+    "bcrypt": "^5.1.0",
+    "inputmask": "^5.0.8",
+    "jsbarcode": "^3.11.5",
     "mongodb": "^5.5.0",
+    "multer": "1.4.5-lts.1",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
     "vue-material-design-icons": "^5.2.0"
   }
 }
