@@ -1,46 +1,24 @@
 <template>
-  <NuxtLayout name="modal" v-if="openModal">
-    <NuxtLayout :name="modalName" />
-  </NuxtLayout>
-  <div id="wrapper">
-    <SideBar />
-    <div id="container">
-      <Header />
-      <NuxtPage id="content" />
-    </div>
-  </div>
+  <v-app>
+
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
+  </v-app>
 </template>
 
 <script setup lang="ts">
-const modalName = useState<string>('modal', () => 'add-manufacturer')
-const openModal = useState<boolean>('open-modal', () => false)
+import { useTheme } from 'vuetify'
+import { useStorage } from '@vueuse/core'
+
+const theme = useTheme();
+
+onMounted(() => {
+  setTimeout(() => {
+    const storeTheme = useStorage('theme', { theme: 'light' }, localStorage)
+    theme.global.name.value = storeTheme.value.theme;
+  }, 200);
+})
 </script>
 
-<style>
-#__nuxt {
-  width: 100%;
-  height: 100%;
-}
-
-#wrapper {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-}
-
-#container {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-#content {
-  overflow: auto;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: auto;
-}
-</style>
+<style></style>

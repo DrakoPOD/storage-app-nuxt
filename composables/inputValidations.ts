@@ -14,7 +14,7 @@ regex: That group is the email address local-part and the second group is the do
 ^([\w-.\_]+)@([\w-]+)\.+([\w-.]{2,64})
 */
 
-const inputVuetify = {
+export const useInputVuetify = {
   required: (value: string) => !!value || 'Required',
   min: (v: string) => (v && v.length >= 8) || 'Min 8 characters',
   emailMatch: (v: string) => {
@@ -31,4 +31,13 @@ const inputVuetify = {
   },
   noNumbers: (v: string) => /[^0-9]/.test(v) || 'Cannot contain numbers',
   number: (v: string) => !isNaN(Number(v)) || 'Must be a number',
+  minChars: (v: string) => (v && v.length >= 3) || 'Min 3 characters',
+  fileSize: (v: File[]) => {
+    return (
+      !v ||
+      !v.length ||
+      v[0].size < 5000000 ||
+      'Image size should be less than 5 MB!'
+    );
+  },
 };

@@ -21,6 +21,12 @@
   <ClientOnly>
     <ThemeMode />
   </ClientOnly>
+
+  <v-btn>Hello</v-btn>
+
+  <Mask />
+
+  <TelInput />
 </template>
 
 <script setup lang="ts">

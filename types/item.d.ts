@@ -1,12 +1,9 @@
 import type { ObjectId } from 'mongodb';
 
 export interface Manufacturer {
-  _id?: ObjectId;
+  _id?: string;
   logo?: string;
   name: string;
-  description: string;
-  country: string;
-  city: string;
   address: string;
   phone: string;
   email: string;
@@ -24,28 +21,32 @@ interface StorageCondition {
 }
 
 interface Item {
-  _id?: ObjectId;
-  serialNumber?: string;
-  image?: string;
+  _id?: string;
   name: string;
   description: string;
   quantity: number;
   cost: number;
-  addedDate: Date;
-  brand: string;
-  manufacturer: Manufacturer | object | string | null;
-  storageCondition?: StorageCondition | object;
+  addedDate: Date | string | number;
+  lastUpdated: Date | string | number;
   category: string;
   laboratory: string;
-  topic: string;
+  topics: string[];
+  tags: string[];
   experiments: string[];
-  code?: string;
+  serialNumber: string;
+  code: string;
+  image?: string | null;
+  brand?: string | null;
+  manufacturer?: string | null;
+  storageConditions?: StorageCondition | object | null;
+  images?: string[];
+  notes?: string | null;
 }
 
 export interface PhysicsItem extends Item {
   functional: boolean;
   broken: boolean;
   brokenDescription?: string;
-  brokenDate?: Date;
+  brokenDate?: Date | string | null;
   brokenBy?: string;
 }

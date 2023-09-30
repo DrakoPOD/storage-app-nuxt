@@ -7,6 +7,7 @@
 </template>
 
 <script setup lang="ts">
+// TODO: Remove this dependency
 import Inputmask from "inputmask";
 
 const props = defineProps({

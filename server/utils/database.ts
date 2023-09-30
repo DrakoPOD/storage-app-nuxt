@@ -1,15 +1,29 @@
 import { Collection, MongoClient } from 'mongodb';
 
 import { databaseNames } from './constantVars';
+import { log } from '@/utils/utils';
+// const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/';
 
-const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/';
+let uri = '';
+
+try {
+  if (process.env.CONN === 'local') {
+    uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/';
+  } else {
+    uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@atlascluster.mliprfz.mongodb.net/`;
+  }
+} catch (err) {
+  console.log(err);
+  uri = 'mongodb://127.0.0.1:27017/';
+}
 
 export const connectMongo = async () => {
-  return new Promise<MongoClient>((resolve, reject) => {
+  return new Promise<MongoClient>(async (resolve, reject) => {
     try {
-      const client = new MongoClient(uri);
+      const client = await MongoClient.connect(uri);
       resolve(client);
     } catch (error) {
+      log('ERROR', 'server/utils/database.ts', error);
       reject(error);
     }
   });

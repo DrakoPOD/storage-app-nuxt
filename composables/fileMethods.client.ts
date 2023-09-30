@@ -18,15 +18,13 @@ export const useUploadFile = async (
 
     // url = 'http://localhost:3000' + url;
 
-    xhr.open('POST', url, true);
-
     xhr.upload.onprogress = (event) => {
       if (uploadProgress) {
         uploadProgress.value = Math.round((event.loaded / event.total) * 100);
       }
     };
 
-    xhr.onreadystatechange = () => {
+    /* xhr.onreadystatechange = () => {
       if (xhr.readyState === XMLHttpRequest.DONE) {
         if (xhr.status === 200) {
           console.log('Uploaded!');
@@ -36,8 +34,19 @@ export const useUploadFile = async (
           reject(xhr.response);
         }
       }
+    }; */
+
+    xhr.upload.onload = () => {
+      console.log('Uploaded!');
+      resolve(xhr.response);
     };
 
+    xhr.upload.onerror = () => {
+      console.log('Error!');
+      reject(xhr.response);
+    };
+
+    xhr.open('POST', url, true);
     xhr.send(formData);
   });
 };

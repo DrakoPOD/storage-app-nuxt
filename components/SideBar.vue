@@ -1,56 +1,81 @@
 <template>
-  <div class="sideBar" :style="style">
-    <nav>
-      <NuxtLink to="/" class="linkItem">
-        Home
-      </NuxtLink>
-      <NuxtLink to="/itemList" class="linkItem">
+  <v-navigation-drawer expand-on-hover :rail="!mobile" v-model="openSide">
+    <v-list nav>
+      <v-list-item nuxt to="/" title="Home">
+        <template v-slot:prepend>
+          <v-icon icon="mdi-home"></v-icon>
+        </template>
+
+      </v-list-item>
+      <v-list-item nuxt to="/itemList">
+        <template v-slot:prepend>
+          <v-icon icon="mdi-view-list"></v-icon>
+        </template>
         Inventario
-      </NuxtLink>
-      <NuxtLink to="addItemView" class="linkItem">
+      </v-list-item>
+      <v-list-item nuxt to="/addItemView">
+        <template v-slot:prepend>
+          <v-icon icon="mdi-package-variant-closed-plus"></v-icon>
+        </template>
         Añadir
-      </NuxtLink>
-    </nav>
-  </div>
+      </v-list-item>
+      <v-list-item nuxt to="/test">
+        <template v-slot:prepend>
+          <v-icon icon="mdi-flask"></v-icon>
+        </template>
+        test
+      </v-list-item>
+      <v-list-item nuxt to="/adminPanel">
+        <template v-slot:prepend>
+          <v-icon icon="mdi-shield-account"></v-icon>
+        </template>
+        Admin
+      </v-list-item>
+    </v-list>
+    <template v-slot:append>
+
+      <v-list>
+        <v-list-item>
+          <template v-slot:prepend>
+            <v-icon icon="mdi-account"></v-icon>
+          </template>
+          Profile
+        </v-list-item>
+        <v-list-item>
+          <template v-slot:prepend>
+            <v-icon icon="mdi-cog"></v-icon>
+          </template>
+          Settings
+        </v-list-item>
+        <v-list-item @click="logout">
+          <template v-slot:prepend>
+            <v-icon icon="mdi-logout"></v-icon>
+          </template>
+          Logout
+        </v-list-item>
+      </v-list>
+
+    </template>
+  </v-navigation-drawer>
 </template>
 
 <script setup lang="ts">
-const openSide = useState('sideMenu', () => false);
+import { useDisplay } from 'vuetify'
 
-const style = computed(() => {
-  return {
-    width: openSide.value ? '150px' : '0px',
+const { mobile } = useDisplay();
+const openSide = useState('sideMenu', () => !mobile.value);
+
+async function logout() {
+  console.log('logout')
+  try {
+    const { data, error } = await useFetch('/api/auth/logout', { method: 'POST', watch: false })
+    navigateTo('/auth/login')
+  } catch (err) {
+    console.error(err);
   }
-})
+  // localStorage.removeItem('token');
+  // navigateTo('/auth/login')
+}
 </script>
 
-<style scoped>
-.sideBar {
-  flex-shrink: 0;
-  width: 0px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  transition: .5s;
-  overflow: hidden;
-}
-
-ul {
-  width: 150px;
-}
-
-nav {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  list-style: none;
-  justify-content: space-around;
-}
-
-.linkItem {
-  text-decoration: none;
-  color: black;
-  padding: 5px;
-  transition: .2s;
-}
-</style>
+<style scoped></style>

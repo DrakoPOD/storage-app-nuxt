@@ -1,20 +1,31 @@
 <template>
-  <button @click="toggleTheme">
-    <white-balance-sunny-icon size="28" />
-    <moon-waning-crescent-icon size="28" />
-    {{ dark ? 'Dark' : 'Light' }}
-  </button>
+  <v-switch inset loading v-model="boolTheme" @change="toggleTheme">
+    <template v-slot:loader>
+      <v-icon size="small" color="black">
+        {{ boolTheme ? 'mdi-weather-night' : 'mdi-weather-sunny' }}
+      </v-icon>
+    </template>
+  </v-switch>
 </template>
 
 <script setup lang="ts">
-import WhiteBalanceSunnyIcon from 'vue-material-design-icons/WhiteBalanceSunny.vue'
-import MoonWaningCrescentIcon from 'vue-material-design-icons/MoonWaningCrescent.vue'
+import { useTheme } from 'vuetify'
+import { useStorage } from '@vueuse/core'
 
-const dark = useState('dark-theme')
+const storeTheme = useStorage('theme', { theme: 'light' })
+const theme = useTheme();
+
+
+
+const boolTheme = computed(() =>
+  theme.global.name.value == 'light' ? false : true
+);
+
 const toggleTheme = () => {
-  document.body.classList.toggle('dark')
-  dark.value = document.body.classList.contains('dark')
-  console.log(document.body.classList)
+  theme.global.name.value = theme.global.current.value.dark
+    ? 'light'
+    : 'dark';
+  storeTheme.value.theme = theme.global.name.value;
 }
 
 </script>

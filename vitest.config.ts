@@ -6,4 +6,10 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
   },
+  // add tsconfig-paths to resolve
+  resolve: {
+    alias: {
+      '@/server/utils': './server/utils/',
+    },
+  },
 });

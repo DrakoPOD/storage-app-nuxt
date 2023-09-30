@@ -1,10 +1,14 @@
 <template>
-  <header>
-    <div class="iconWrapper">
-      <menu-icon class="icon" :size="40" @click="toggleSide"></menu-icon>
-    </div>
-    Hello
-  </header>
+  <v-app-bar>
+    <template v-slot:prepend>
+      <v-app-bar-nav-icon @click="toggleSide"></v-app-bar-nav-icon>
+    </template>
+    <v-app-bar-title>
+      My APP
+    </v-app-bar-title>
+    <v-spacer></v-spacer>
+    <ThemeMode />
+  </v-app-bar>
 </template>
 
 <script setup lang="ts">
@@ -15,42 +19,8 @@ const openSide = useState('sideMenu', () => false);
 const toggleSide = () => {
   openSide.value = !openSide.value;
 }
+
+
 </script>
 
-<style scoped>
-header {
-  width: 100%;
-  height: 50px;
-  background-color: aquamarine;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-}
-
-
-
-.linkItem:hover {
-  color: white;
-  background-color: black;
-}
-
-.iconWrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.icon {
-  cursor: pointer;
-  width: 40px;
-  height: 40px;
-  transition: .2s;
-  border-radius: 50%;
-  margin: auto;
-}
-
-.icon:hover {
-  background-color: black;
-  color: white;
-}
-</style>
+<style scoped></style>

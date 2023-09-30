@@ -1,5 +1,5 @@
 export default defineEventHandler((event) => {
-  console.log('New request: ' + getRequestURL(event));
+  console.log('New api request: ' + getRequestURL(event));
 
   const headers = {
     'Access-Control-Allow-Methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',

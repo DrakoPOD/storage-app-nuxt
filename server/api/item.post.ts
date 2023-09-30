@@ -1,5 +1,5 @@
-import { MongoClient } from 'mongodb';
 import { databaseNames } from '../utils/constantVars';
+import { connectMongo } from '../utils/database';
 
 // TODO: edit this type
 import type { Body } from '@/types/api';
@@ -7,9 +7,10 @@ import type { Body } from '@/types/api';
 const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/';
 
 export default defineEventHandler(async (event) => {
-  const data = await readBody<any>(event);
-  const client = new MongoClient(uri);
+  const body = await readBody<any>(event);
+  const client = await connectMongo();
 
+  const data = body.data;
   const { database, collection } = databaseNames['item'];
 
   try {

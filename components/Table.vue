@@ -1,30 +1,45 @@
 <template>
-  <div class="containerTable">
-    <table>
-      <thead>
-        <tr>
-          <th v-for="header in headers" :key="header.value" @click="sortColumn(header.value as THeader)">
-            <div class="flex">
-              <p>{{ header.text }}</p>
-              <menu-down-icon :size="28"
-                :class="'icon ' + (header.sort === Sort.ASC && header.sorted ? 'iconSort' : '')" />
-            </div>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="data in listItems" :key="data._id?.toString()">
-          <td>{{ data.name }}</td>
-          <td>{{ data.quantity }}</td>
-          <td>{{ data.laboratory }}</td>
-          <td>{{ data.topic }}</td>
-          <td>{{ data.functional }}</td>
-          <td>{{ data.brand }}</td>
-          <td v-if="listItems?.length == 0" colspan="0" class="no-data">There is no data here... :(</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <v-table>
+    <thead>
+      <tr>
+        <th v-for="header in headers" :key="header.value" @click="sortColumn(header.value as THeader)">
+          <div class="flex">
+            <p>{{ header.text }}</p>
+            <v-icon icon="mdi-menu-down" class="icon"
+              :class="{ 'iconSort': (header.sorted && header.sort === Sort.ASC) }" />
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="data in listItems" :key="data._id?.toString()">
+        <td>{{ data.name }}</td>
+        <td>{{ data.quantity }}</td>
+        <td>{{ data.laboratory }}</td>
+        <td>{{ data.topic }}</td>
+        <td>
+          <template v-if="data.functional">
+            <v-icon color="success" icon="mdi-check"></v-icon>
+          </template>
+          <template v-else>
+            <v-icon color="error" icon="mdi-close"></v-icon>
+          </template>
+        </td>
+        <td>{{ data.brand }}</td>
+      </tr>
+
+      <tr v-if="listItems?.length == 0 || !listItems">
+        <td colspan="6" class="no-data">
+          <template v-if="loadingData">
+            Loading data...
+          </template>
+          <template v-else>
+            There is no data here... :(
+          </template>
+        </td>
+      </tr>
+    </tbody>
+  </v-table>
 </template>
 
 <script setup lang="ts">
@@ -38,6 +53,7 @@ type THeader = 'name' | 'quantity' | 'laboratory' | 'topic' | 'functional' | 'br
 const listItems = ref<PhysicsItem[] | null>(null)
 
 const filters = ref<object>({})
+const loadingData = ref(true)
 
 enum Sort {
   ASC = 'asc',
@@ -49,7 +65,7 @@ onMounted(async () => {
 })
 
 const headers = ref([
-  { text: 'Nombre', value: 'name', sorted: false, sort: Sort.ASC },
+  { text: 'Nombre', value: 'name', sorted: true, sort: Sort.ASC },
   { text: 'Cantidad', value: 'quantity', sorted: false, sort: Sort.ASC },
   { text: 'Laboratorio', value: 'laboratory', sorted: false, sort: Sort.ASC },
   { text: 'Tema', value: 'topic', sorted: false, sort: Sort.ASC },
@@ -57,14 +73,14 @@ const headers = ref([
   { text: 'Marca', value: 'brand', sorted: false, sort: Sort.ASC },
 ])
 
-const sortColumn = (value: THeader) => {
+const sortColumn = (val: THeader) => {
   if (!listItems.value) return
 
   const header = headers.value.find((header) => header.sorted)
   if (header) {
     header.sorted = false
   }
-  const headerSelected = headers.value.find((header) => header.value === value)!
+  const headerSelected = headers.value.find((header) => header.value === val)!
   if (headerSelected) {
     headerSelected.sorted = true
     headerSelected.sort = headerSelected.sort === Sort.ASC ? Sort.DESC : Sort.ASC
@@ -72,9 +88,9 @@ const sortColumn = (value: THeader) => {
 
   listItems.value = listItems.value.sort((a, b) => {
     if (headerSelected.sort === Sort.ASC) {
-      return a[value] > b[value] ? 1 : -1
+      return a[val] > b[val] ? 1 : -1
     } else {
-      return a[value] < b[value] ? 1 : -1
+      return a[val] < b[val] ? 1 : -1
     }
   })
 }
@@ -87,59 +103,29 @@ const getItems = async () => {
 
   if (error.value) {
     console.log(error)
+    loadingData.value = false
     return
   }
-
-  console.log(data.value)
+  data.value?.sort((a, b) => a.name > b.name ? 1 : -1)
+  loadingData.value = false
   listItems.value = data.value
 }
 </script>
 
 <style scoped>
-.containerTable {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  padding-top: 20px;
-  align-items: flex-start;
-}
-
-table {
-  table-layout: fixed;
-  border-collapse: collapse;
-  width: 95%;
-  flex-shrink: 0;
-}
-
-th {
-  background-color: #4caf50;
-  color: white;
-}
-
 .flex {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-th,
-td {
-  text-align: left;
-  padding: 8px;
-}
 
-tbody>tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
 
 th {
   cursor: pointer;
 }
 
 .icon {
-  height: 30px !important;
-  width: 30px !important;
   transition: 0.3s;
 }
 

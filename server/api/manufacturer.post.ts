@@ -1,14 +1,14 @@
-import { MongoClient } from 'mongodb';
 import { databaseNames } from '../utils/constantVars';
 
 // TODO: edit this type
 import type { Body } from '@/types/api';
 
-const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/';
+// const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/';
 
 export default defineEventHandler(async (event) => {
   const data = await readBody<any>(event);
-  const client = new MongoClient(uri);
+  // const client = new MongoClient(uri);
+  const client = await connectMongo();
 
   const { database, collection } = databaseNames['manufacturer'];
 

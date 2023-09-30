@@ -5,7 +5,14 @@ export default defineNuxtConfig({
   routeRules: {
     // '/test': { ssr: false },
   },
-  css: ['@/assets/css/main.css'],
+  css: [
+    '@/assets/css/main.css',
+    'vuetify/lib/styles/main.sass',
+    '@mdi/font/css/materialdesignicons.min.css',
+  ],
+  build: {
+    transpile: ['vuetify'],
+  },
   vite: {
     server: {
       fs: {

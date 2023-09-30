@@ -1,8 +1,6 @@
 import { describe, test, expect } from 'vitest';
 import { setup, $fetch } from '@nuxt/test-utils';
 
-import { useGet } from '../composables/apiMethods';
-
 describe('My test', async () => {
   await setup({
     // test context options

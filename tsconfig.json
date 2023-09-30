@@ -2,9 +2,19 @@
   // https://nuxt.com/docs/guide/concepts/typescript
   "compilerOptions": {
     // "allowSyntheticDefaultImports": true,
+    // "isolatedModules": false,
     "paths": {
-      "@/types/*": ["./types/*.d.ts"]
-    }
+      "@/types/*": ["./types/*.d.ts"],
+      "@/enums/*": ["./types/*.ts"],
+      "@/server/utils/*": ["./server/utils/*.ts"],
+      "@/schemas/*": ["./schemas/*.ts"]
+    },
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types",
+      "./node_modules/vuetify/types"
+    ],
+    "types": ["vuetify"]
   },
   "extends": "./.nuxt/tsconfig.json"
 }

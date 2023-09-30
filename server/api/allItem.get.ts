@@ -1,12 +1,13 @@
-import { MongoClient } from 'mongodb';
 import { databaseNames } from '../utils/constantVars';
 
 import type { IQuery } from '@/types/api';
 
-const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/';
+//const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/';
 
 export default defineEventHandler(async (event) => {
-  const client = new MongoClient(uri);
+  //const client = new MongoClient(uri);
+  const client = await connectMongo();
+
   const findQuery = getQuery(event) as IQuery;
 
   const { database, collection } = databaseNames['item'];

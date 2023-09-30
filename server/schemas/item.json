@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "tittle": "Item",
+  "description": "An item in the storage",
+  "type": "object",
+  "properties": {
+    "_id": {
+      "description": "The unique identifier for an item, use in MongoDB",
+      "type": "string"
+    },
+    "name": {
+      "description": "Name of the item",
+      "type": "string"
+    },
+    "description": {
+      "description": "Description of the item",
+      "type": "string"
+    },
+    "cost": {
+      "description": "Cost of the item",
+      "type": "number",
+      "minimum": 0
+    },
+    "quantity": {
+      "description": "Quantity of the item",
+      "type": "number"
+    },
+    "addedDate": {
+      "description": "Date when the item was added",
+      "type": "string",
+      "format": "date-time"
+    },
+    "lastUpdated": {
+      "description": "Date when the item was last updated",
+      "type": "string",
+      "format": "date-time"
+    },
+    "brand": {
+      "description": "Brand of the item",
+      "type": "string"
+    },
+    "manufacturer": {
+      "description": "Manufacturer of the item",
+      "type": "string"
+    },
+    "category": {
+      "description": "Category of the item",
+      "type": "string"
+    },
+    "tags": {
+      "description": "Tags of the item",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "images": {
+      "description": "Images of the item",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "storageConditions": {
+      "description": "Storage conditions of the item",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "categpry": {
+      "description": "Category of the item",
+      "type": "string"
+    },
+    "laboratory": {
+      "description": "Laboratory of the item",
+      "enum": [
+        "biology",
+        "chemistry",
+        "physics",
+        "computer-science",
+        "mathematics",
+        "other"
+      ]
+    },
+    "topics": {
+      "description": "Units, classses or topics of the item should be used for",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "experiments": {
+      "description": "Experiments the item was used for",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "notes": {
+      "description": "Notes of the item",
+      "type": "string"
+    },
+    "code": {
+      "description": "Code of the item for internal use",
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "description",
+    "cost",
+    "quantity",
+    "addedDate",
+    "lastUpdated",
+    "category",
+    "tags",
+    "images",
+    "storageConditions",
+    "laboratory",
+    "topics",
+    "experiments",
+    "notes",
+    "code"
+  ]
+}
