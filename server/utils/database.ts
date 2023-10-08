@@ -1,4 +1,4 @@
-import { Collection, MongoClient } from 'mongodb';
+import { Collection, MongoClient, ObjectId } from 'mongodb';
 
 import { databaseNames } from './constantVars';
 import { log } from '@/utils/utils';
@@ -17,22 +17,40 @@ try {
   uri = 'mongodb://127.0.0.1:27017/';
 }
 
+export const customID = ObjectId;
+
 export const connectMongo = async () => {
   return new Promise<MongoClient>(async (resolve, reject) => {
     try {
       const client = await MongoClient.connect(uri);
       resolve(client);
     } catch (error) {
-      log('ERROR', 'server/utils/database.ts', error);
+      log(
+        'ERROR',
+        'server/utils/database.tsm -- Connecting to database',
+        error
+      );
       reject(error);
     }
   });
 };
 
+type IGetCollection =
+  | {
+      coll: Collection;
+      client: MongoClient;
+      err?: never;
+    }
+  | {
+      err: Error | unknown;
+      coll?: never;
+      client?: never;
+    };
+
 export const getCollection = async (
   database: string,
   collection: string
-): Promise<{ coll: Collection; client: MongoClient; err?: Error }> => {
+): Promise<IGetCollection> => {
   return new Promise(async (resolve, reject) => {
     try {
       const client = await connectMongo();
@@ -42,7 +60,7 @@ export const getCollection = async (
 
       resolve({ coll, client });
     } catch (error) {
-      reject({ err: error });
+      resolve({ err: error });
     }
   });
 };

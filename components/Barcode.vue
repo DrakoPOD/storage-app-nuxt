@@ -7,7 +7,6 @@
 
 <script setup lang="ts">
 import JsBarcode from 'jsbarcode';
-import { w } from 'vitest/dist/types-fe79687a';
 
 const props = defineProps({
   modelValue: {

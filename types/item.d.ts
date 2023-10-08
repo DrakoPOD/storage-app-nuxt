@@ -32,7 +32,10 @@ interface Item {
   laboratory: string;
   topics: string[];
   tags: string[];
-  experiments: string[];
+  experiments: {
+    title: string;
+    description: string;
+  }[];
   serialNumber: string;
   code: string;
   image?: string | null;

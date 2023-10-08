@@ -1,8 +1,11 @@
+import { set } from 'mongoose';
 import { databaseNames } from '../utils/constantVars';
 
 import type { IQuery } from '@/types/api';
 
 //const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/';
+
+// TODO edit old api files to new API
 
 export default defineEventHandler(async (event) => {
   //const client = new MongoClient(uri);
@@ -17,11 +20,11 @@ export default defineEventHandler(async (event) => {
     const coll = await mongoDB.collection(collection);
 
     let result = await coll.find(findQuery).toArray();
-
-    return Promise.resolve(result);
+    setResponseStatus(event, 200);
+    return result;
   } catch (error) {
     console.log(error);
-    return Promise.reject(error);
+    return error;
   } finally {
     await client.close();
   }

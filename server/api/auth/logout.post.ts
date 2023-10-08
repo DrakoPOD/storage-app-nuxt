@@ -1,39 +1,31 @@
 import { parseCookies } from 'h3';
 
 export default defineEventHandler(async (event) => {
-  const cookies = parseCookies(event);
-
-  const token = cookies.token;
-
-  if (!token) {
-    setResponseStatus(event, 400);
-    return { message: 'Bad request' };
+  if (event.context.error) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Bad request',
+    });
   }
 
-  const { payload, error } = checkToken(token);
-
-  if (error === 'expired') {
-    setResponseStatus(event, 400);
-    return { message: 'Token expired' };
-  }
-
-  if (!payload) {
-    setResponseStatus(event, 400);
-    return { message: 'Bad request' };
-  }
+  const payload = event.context.user;
+  const token = event.context.token;
 
   const data = {
     token,
-    user: payload.email,
+    email: payload.email,
+    id: payload.id,
     expires: payload.exp,
     expireAt: new Date(payload.exp! * 1000),
   };
 
-  const { coll, err } = await getCollection('test', 'revoked-tokens');
+  const { coll, client, err } = await getCollection('test', 'revoked-tokens');
 
   if (err) {
-    setResponseStatus(event, 500);
-    return { message: 'Something went wrong' };
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Something went wrong',
+    });
   }
 
   const docToken = await coll.findOne({ token });
@@ -43,9 +35,11 @@ export default defineEventHandler(async (event) => {
     return { message: 'Bad request' };
   }
 
-  await coll.createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 });
+  coll.createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 });
 
   const result = await coll.insertOne(data);
+
+  client.close();
 
   setResponseStatus(event, 200);
   return { message: 'User logged out' };

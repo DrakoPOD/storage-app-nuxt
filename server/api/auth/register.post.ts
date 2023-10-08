@@ -5,8 +5,6 @@ import { getCollection } from '../../utils/database';
 import type { IUser } from '@/types/user';
 import { checkBody, checkData } from '../../utils/checkFunctions';
 
-// TODO: https://www.section.io/engineering-education/how-to-build-authentication-api-with-jwt-token-in-nodejs/
-
 export default defineEventHandler(async (event) => {
   let body = await readBody<IUser>(event);
 

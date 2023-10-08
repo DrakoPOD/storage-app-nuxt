@@ -7,11 +7,18 @@ import type { UserPayload } from '@/types/user';
     at node_modules/.pnpm/safe-buffer@5.2.1/node_modules/safe-buffer/index.js
  */
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  if (process.client) return;
+  const token = useCookie('token');
+
+  if (process.client) {
+    if (!token.value) {
+      if (to.path === '/auth/login') return;
+      return navigateTo('/auth/login');
+    }
+    return;
+  }
+
   const { checkToken } = await import('../server/utils/checkToken');
   const { checkBlacklist } = await import('../server/utils/checkToken');
-  const token = useCookie('token');
-  // console.log(cookies);
 
   if (token.value) {
     try {

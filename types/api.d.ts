@@ -16,4 +16,5 @@ export interface IDatabaseNames {
 
 export interface IQuery extends QueryObject {
   id?: string;
+  all?: boolean;
 }

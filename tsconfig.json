@@ -13,8 +13,8 @@
       "./node_modules/@types",
       "./types",
       "./node_modules/vuetify/types"
-    ],
-    "types": ["vuetify"]
+    ]
   },
+  "types": ["vuetify"],
   "extends": "./.nuxt/tsconfig.json"
 }

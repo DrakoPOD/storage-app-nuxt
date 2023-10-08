@@ -32,8 +32,7 @@ import { VForm } from 'vuetify/components'
 definePageMeta({
   layout: "login-layout",
 });
-
-const user = ref({ name: "", email: "", password: "" });
+const user = ref({ email: "", password: "" });
 const loginFailed = ref(false);
 const isSubmitting = ref(false);
 
@@ -57,18 +56,23 @@ async function logUser() {
   loginFailed.value = false;
   try {
     console.log('fetching')
-    const { data, error, status } = await useFetch('/api/auth/login', { method: 'POST', watch: false, body: user.value })
+    const { data, error, status } = await useFetch('/api/auth/login', { method: 'POST', watch: false, body: user.value, server: false })
     if (status.value === "success") {
+      console.log(data.value)
       console.log('redirecting')
       navigateTo('/')
     } else {
-      if (error.value?.statusCode === 400) {
-        msg.value = "User or password incorrect"
-        loginFailed.value = true;
-      } else if (error.value?.statusCode === 500) {
-        msg.value = "Something went wrong"
-        loginFailed.value = true;
-      }
+      if (error.value?.statusCode === 409) {
+        navigateTo('/')
+        return
+      } else
+        if (error.value?.statusCode === 400) {
+          msg.value = "User or password incorrect"
+          loginFailed.value = true;
+        } else if (error.value?.statusCode === 500) {
+          msg.value = "Something went wrong"
+          loginFailed.value = true;
+        }
     }
   } catch (err) {
     console.error(err);

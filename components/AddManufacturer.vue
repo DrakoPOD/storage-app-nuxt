@@ -5,9 +5,6 @@
 
         <add-image label="Logo"></add-image>
         <v-text-field required v-model="manufacturer.name" placeholder="Nombre" label="Nombre"></v-text-field>
-        <v-text-field v-model="manufacturer.description" placeholder="Descripción" label="Descripción"></v-text-field>
-        <v-text-field v-model="manufacturer.country" placeholder="País" label="País"></v-text-field>
-        <v-text-field v-model="manufacturer.city" placeholder="Ciudad" label="Ciudad"></v-text-field>
         <v-text-field v-model="manufacturer.address" placeholder="Dirección" label="Dirección"></v-text-field>
         <tel-input v-model="manufacturer.phone"></tel-input>
         <!-- <v-text-field v-model="manufacturer.phone" placeholder="Teléfono" label="Teléfono"></v-text-field> -->
@@ -49,9 +46,6 @@ const uploadProgress = ref(0)
 
 const manufacturer = ref<Manufacturer>({
   name: '',
-  description: '',
-  country: '',
-  city: '',
   address: '',
   phone: '',
   email: '',

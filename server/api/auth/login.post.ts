@@ -4,6 +4,13 @@ import bcrypt from 'bcrypt';
 //import { getCollection } from '../../utils/database';
 
 export default defineEventHandler(async (event) => {
+  if (event.context.user) {
+    throw createError({
+      statusCode: 409,
+      statusMessage: 'User already logged in',
+    });
+  }
+
   const body = await readBody(event);
 
   if (!validateBody(body)) {
@@ -18,7 +25,9 @@ export default defineEventHandler(async (event) => {
     return { message: 'Something went wrong' };
   }
 
-  const user = await coll.findOne({ email: body.email });
+  const user = await coll.findOne({
+    email: { $regex: body.email, $options: 'i' },
+  });
 
   if (!user) {
     setResponseStatus(event, 400);
@@ -39,15 +48,39 @@ export default defineEventHandler(async (event) => {
 
   client.close();
 
+  const sessionID = new customID();
+
   const token = createToken(
-    { email: user.email, role: Role.ADMIN },
+    { id: user._id.toString(), email: user.email, role: Role.ADMIN, sessionID },
     { expiresIn: '1h' }
   );
 
+  const headers = event.node.req.headers;
+
+  const ip = event.node.req.headers['x-forwarded-for'];
+  const browser = headers['sec-ch-ua'];
+  const geoLocation = await getGeoLocation(ip);
+
+  const loginData = {
+    _id: sessionID,
+    id_user: user._id.toString(),
+    ip,
+    browser,
+    userAgent: headers['user-agent'],
+    geoLocation,
+    token,
+    date: new Date().getTime(),
+  };
+
+  const logColl = await client.db('test').collection('login-log');
+
+  await logColl.insertOne(loginData);
   // header expires in 1 hour
-  setCookie(event, 'token', token, { httpOnly: true, maxAge: 3600 });
+  setCookie(event, 'token', token, { maxAge: 3600 });
+  // setCookie(event, 'test', 'a test cookie');
   setResponseStatus(event, 200);
 
-  event.respondWith();
-  return { message: 'User logged in' };
+  client.close();
+
+  return { message: 'User logged in', role: user.role, sessionID };
 });

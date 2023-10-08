@@ -1,7 +1,6 @@
 import { databaseNames } from '../utils/constantVars';
 import { connectMongo } from '../utils/database';
 
-// TODO: edit this type
 import type { Body } from '@/types/api';
 
 const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/';

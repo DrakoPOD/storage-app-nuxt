@@ -58,6 +58,7 @@ export const usePost = async <T>(
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(body),
+    watch: false,
   });
 
   if (error.value) {
