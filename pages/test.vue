@@ -46,7 +46,7 @@ const uploadFile = async () => {
 };
 
 const fetchData = async () => {
-  const response = await useFetch('/api/item', {
+  const response = await useFetch('/api/item/getItem', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

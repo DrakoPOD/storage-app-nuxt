@@ -7,7 +7,7 @@ describe('My test', async () => {
   });
 
   test('test GET', async () => {
-    const response = await $fetch('/api/item', {
+    const response = await $fetch('/api/item/getItem', {
       method: 'GET',
       query: {
         name: 'asdsd',

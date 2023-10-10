@@ -16,7 +16,7 @@
         <td>{{ data.name }}</td>
         <td>{{ data.quantity }}</td>
         <td>{{ data.laboratory }}</td>
-        <td>{{ data.topic }}</td>
+        <td>{{ data.topics }}</td>
         <td>
           <template v-if="data.functional">
             <v-icon color="success" icon="mdi-check"></v-icon>
@@ -48,7 +48,7 @@ import MenuUpIcon from 'vue-material-design-icons/MenuUp.vue'
 
 import type { PhysicsItem } from '@/types/item'
 
-type THeader = 'name' | 'quantity' | 'laboratory' | 'topic' | 'functional' | 'brand';
+type THeader = 'name' | 'quantity' | 'laboratory' | 'topics' | 'functional' | 'brand';
 
 const listItems = ref<PhysicsItem[] | null>(null)
 
@@ -86,17 +86,17 @@ const sortColumn = (val: THeader) => {
     headerSelected.sort = headerSelected.sort === Sort.ASC ? Sort.DESC : Sort.ASC
   }
 
-  listItems.value = listItems.value.sort((a, b) => {
+  listItems.value = listItems.value.sort((a: PhysicsItem, b: PhysicsItem) => {
     if (headerSelected.sort === Sort.ASC) {
-      return a[val] > b[val] ? 1 : -1
+      return a[val]! > b[val]! ? 1 : -1
     } else {
-      return a[val] < b[val] ? 1 : -1
+      return a[val]! < b[val]! ? 1 : -1
     }
   })
 }
 
 const getItems = async () => {
-  const { data, error } = await useFetch<PhysicsItem[]>('api/allItem', {
+  const { data, error } = await useFetch<PhysicsItem[]>('api/item/getAllItem', {
     method: 'GET',
     query: filters.value
   })

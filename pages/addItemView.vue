@@ -190,7 +190,7 @@ const submit = async () => {
     console.log('invalid')
     return
   }
-  const res = await usePost('api/item', { db: { type: 'item' }, data: item.value })
+  const res = await usePost('api/item/addItem', { db: { type: 'item' }, data: item.value })
 
   console.log(res)
 }
