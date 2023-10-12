@@ -1,8 +1,12 @@
 <template>
-  <v-row>
-    <v-col md="2" ms="4">
-      <v-autocomplete v-model="selectedCountry" :custom-filter="customFilter" :items="listCountries" item-value="code"
-        item-title="number">
+  <v-text-field variant="solo" density="compact" :model-value="typedNumber"
+    @update:model-value="(val) => (typedNumber = val)">
+    <template #prepend>
+      <v-autocomplete label="Country Code" variant="solo" density="compact" v-model="selectedCountry"
+        :custom-filter="customFilter" :items="listCountries" item-value="code" item-title="number" hide-details>
+        <!-- <template #prepend>
+          <span :class="flags[selectedCountry]"></span>
+        </template> -->
         <template v-slot:selection="{ item, index }">
           <span :class="item.raw?.flag"></span>
           <p>+{{ item.raw?.number }}</p>
@@ -20,12 +24,8 @@
           </v-list-item>
         </template>
       </v-autocomplete>
-    </v-col>
-
-    <v-col>
-      <v-text-field :model-value="typedNumber" @update:model-value="(val) => (typedNumber = val)"></v-text-field>
-    </v-col>
-  </v-row>
+    </template>
+  </v-text-field>
 </template>
 
 <script setup lang="ts">
@@ -43,6 +43,8 @@ import { emit } from 'process';
 
 defineProps(['modelValue'])
 const emits = defineEmits(['update:modelValue'])
+
+//const flags = ref<Record<string, string>>({})
 
 const number = ref({
   template: '',
@@ -81,6 +83,9 @@ const listCountries = ref([
       const number = getCountryCallingCode(c as CountryCode);
 
       name = intlName.of(c)!;
+
+      //flags.value[c] = `fi fi-${c.toLowerCase()}`;
+
       return {
         code: c,
         flag: `fi fi-${c.toLowerCase()}`,
@@ -144,12 +149,20 @@ const customFilter = (itemTitle: string, queryText: string, item: any) => {
     textFour.includes(searchText)
   );
 };
+
 onMounted(() => { });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .fi {
   margin-right: 10px;
   min-width: 20px;
+}
+
+:deep() {
+  .v-input__prepend {
+    margin: 0 !important;
+    margin-inline-end: 0px;
+  }
 }
 </style>
