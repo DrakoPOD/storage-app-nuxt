@@ -32,8 +32,14 @@
 
         </v-col>
         <v-col cols="12" sm="6">
-          <v-select name="manufacturer" v-model="item.manufacturer" @update:model-value="val => selectedOption(val)"
-            label="Fabricante" :items="manufacturerList" item-title="name" item-value="_id">
+          <v-select name="manufacturer" v-model="item.manufacturer" label="Fabricante" :items="manufacturerList"
+            item-title="name" item-value="_id">
+            <template v-slot:prepend-item>
+              <v-list-item title="Añadir fabricante" ripple @click="openModal = true">
+
+              </v-list-item>
+              <v-divider class="mt-2"></v-divider>
+            </template>
           </v-select>
 
         </v-col>
@@ -196,7 +202,7 @@ const submit = async () => {
 }
 
 const getManufacturers = async () => {
-  const { data, error } = await useFetch<Manufacturer[]>('api/allManufacturer',
+  const { data, error } = await useFetch<Manufacturer[]>('/api/manufacturer/allManufacturer',
     {
       method: 'GET',
       headers: {
@@ -208,11 +214,13 @@ const getManufacturers = async () => {
   )
 
   if (error.value) {
-    console.log(error)
+    console.log(error.value)
     return
   }
-  console.log(data.value)
-  manufacturerList.value = [{ name: 'Añadir fabricante', _id: '0' } as Manufacturer, ...data.value || []]
+  if (data.value) {
+    console.log(data.value)
+    manufacturerList.value = data.value
+  }
 }
 
 function selectedOption(val: string) {

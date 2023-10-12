@@ -27,7 +27,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         if (to.path === '/auth/login') return;
         return navigateTo('/auth/login');
       }
-      const valid = await checkBlacklist(token.value);
+      const { valid } = await checkBlacklist(token.value);
 
       if (!valid) {
         if (to.path === '/auth/login') return;

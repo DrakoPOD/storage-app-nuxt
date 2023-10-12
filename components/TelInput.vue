@@ -39,6 +39,10 @@ import {
   getCountries,
   getCountryCallingCode,
 } from 'libphonenumber-js/max';
+import { emit } from 'process';
+
+defineProps(['modelValue'])
+const emits = defineEmits(['update:modelValue'])
 
 const number = ref({
   template: '',
@@ -93,7 +97,7 @@ const listCountries = ref([
     }),
 ]);
 
-const aaaa = ref('');
+
 const typedNumber = computed({
   get: () => {
     return number.value.national;
@@ -102,8 +106,9 @@ const typedNumber = computed({
     const asYouType = new AsYouType(selectedCountry.value || 'DO');
     // const input = e.target as HTMLInputElement;
     const formatted = asYouType.input(e);
-    aaaa.value = formatted;
+
     const num = asYouType.getNumber();
+    emits('update:modelValue', num?.number || '');
 
     if (!num) return;
 

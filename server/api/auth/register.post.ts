@@ -1,7 +1,5 @@
 import bcrypt from 'bcrypt';
 
-import { getCollection } from '../../utils/database';
-
 import type { IUser } from '@/types/user';
 import { checkBody, checkData } from '../../utils/checkFunctions';
 
@@ -20,7 +18,7 @@ export default defineEventHandler(async (event) => {
     return { message: 'Something went wrong' };
   }
 
-  const userExist = await coll.findOne({ email: body.email });
+  const userExist = await coll!.findOne({ email: body.email });
 
   if (userExist) {
     setResponseStatus(event, 409);
@@ -31,9 +29,9 @@ export default defineEventHandler(async (event) => {
 
   delete body.password;
   body = { ...body, salt, hash };
-  await coll.insertOne(body);
+  await coll!.insertOne(body);
 
-  await client.close();
+  await client!.close();
   console.log('User created');
   setResponseStatus(event, 201);
   return { message: 'User created' };

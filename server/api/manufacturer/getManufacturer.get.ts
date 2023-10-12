@@ -1,6 +1,7 @@
 import type { IQuery } from '@/types/api';
+import { set } from 'mongoose';
 
-// const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/';
+//const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/';
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event) as IQuery;
@@ -19,7 +20,7 @@ export default defineEventHandler(async (event) => {
     findQuery = query;
   }
 
-  const { coll, client, err } = await getCollection('test', 'items');
+  const { coll, client, err } = await getCollection('test', 'manufacturers');
 
   if (err) {
     setResponseStatus(event, 500);
@@ -29,5 +30,6 @@ export default defineEventHandler(async (event) => {
   let result = await coll!.findOne(findQuery);
   await client!.close();
 
+  setResponseStatus(event, 200);
   return result;
 });

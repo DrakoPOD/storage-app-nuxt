@@ -20,19 +20,19 @@ try {
 export const customID = ObjectId;
 
 export const connectMongo = async () => {
-  return new Promise<MongoClient>(async (resolve, reject) => {
-    try {
-      const client = await MongoClient.connect(uri);
-      resolve(client);
-    } catch (error) {
-      log(
-        'ERROR',
-        'server/utils/database.tsm -- Connecting to database',
-        error
-      );
-      reject(error);
+  return new Promise<{ client?: MongoClient; error?: any }>(
+    async (resolve, reject) => {
+      try {
+        const client = await MongoClient.connect(uri);
+        resolve({ client });
+      } catch (error) {
+        console.log(
+          'ERROR, server/utils/database.ts -- Connecting to database'
+        );
+        resolve({ error });
+      }
     }
-  });
+  );
 };
 
 type IGetCollection =
@@ -53,13 +53,20 @@ export const getCollection = async (
 ): Promise<IGetCollection> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const client = await connectMongo();
+      const { client, error } = await connectMongo();
 
-      const mongoDB = await client.db(database);
-      const coll = await mongoDB.collection(collection);
+      if (error) {
+        console.log('Error in getCollection');
+        resolve({ err: error });
+      }
+      if (client) {
+        const mongoDB = await client.db(database);
+        const coll = await mongoDB.collection(collection);
 
-      resolve({ coll, client });
+        resolve({ coll, client });
+      }
     } catch (error) {
+      console.log('Error in getCollection');
       resolve({ err: error });
     }
   });

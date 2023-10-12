@@ -28,13 +28,12 @@ export const checkBlacklist = async (token: string) => {
   const { coll, err } = await getCollection('test', 'revoked-tokens');
 
   if (err) {
-    console.log('err', err);
-    throw { error: 'Something went wrong' };
+    return { valid: false, error: 'internal server error' };
   }
 
-  const doc = await coll.findOne({ token });
+  const doc = await coll!.findOne({ token });
 
-  if (doc) return false;
+  if (doc) return { valid: false };
 
-  return true;
+  return { valid: true };
 };

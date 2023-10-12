@@ -3,6 +3,7 @@ import {
   queryUserSchema,
   bodyNewUserSchema,
   itemSchema,
+  manufacturerSchema,
 } from '../../schemas/schemas';
 import Ajv from 'ajv/dist/2020';
 
@@ -28,4 +29,10 @@ export const validateItem = (item: Object) => {
   const validator = new Ajv().compile(itemSchema);
 
   return validator(item);
+};
+
+export const validateManufacturer = (manufacturer: Object) => {
+  const validator = new Ajv().compile(manufacturerSchema);
+
+  return validator(manufacturer);
 };
