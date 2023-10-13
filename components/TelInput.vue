@@ -1,5 +1,5 @@
 <template>
-  <v-text-field variant="solo" density="compact" :model-value="typedNumber"
+  <v-text-field variant="solo" density="compact" label="Teléfono" :model-value="typedNumber"
     @update:model-value="(val) => (typedNumber = val)">
     <template #prepend>
       <v-autocomplete label="Country Code" variant="solo" density="compact" v-model="selectedCountry"
@@ -39,7 +39,6 @@ import {
   getCountries,
   getCountryCallingCode,
 } from 'libphonenumber-js/max';
-import { emit } from 'process';
 
 defineProps(['modelValue'])
 const emits = defineEmits(['update:modelValue'])
