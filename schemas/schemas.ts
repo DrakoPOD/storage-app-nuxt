@@ -1,6 +1,7 @@
 import { JSONSchemaType } from 'ajv';
 import type { Item, Manufacturer, StorageCondition } from '../types/item.d';
 import type { INewUser, IQueryUser } from '@/types/user';
+import { INewLaboratory } from '@/types/laboratory';
 
 export const storageConditionsSchema: JSONSchemaType<StorageCondition> = {
   $schema: 'https://json-schema.org/draft/2020-12/schema',
@@ -348,4 +349,18 @@ export const bodyNewUserSchema: JSONSchemaType<INewUser> = {
   },
   required: ['name', 'email', 'role', 'permissions'],
   additionalProperties: false,
+};
+
+export const bodyLaboratorySchema: JSONSchemaType<INewLaboratory> = {
+  $schema: 'https://json-schema.org/draft/2020-12/schema',
+  $id: 'https://example.com/product.schema.json',
+  type: 'object',
+  properties: {
+    name: { type: 'string' },
+    code: { type: 'string', pattern: /[A-Z]{3}-\d{3}/.toString().slice(1, -1) },
+    teacher: { type: 'string', nullable: true, default: null },
+    area: { type: 'string', nullable: true, default: null },
+    building: { type: 'string', nullable: true, default: null },
+  },
+  required: ['name', 'code'],
 };

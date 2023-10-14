@@ -19,6 +19,13 @@
         </template>
         Añadir
       </v-list-item>
+      <v-list-item nuxt to="/laboratory">
+        <template v-slot:prepend>
+          <v-icon icon="mdi-flask"></v-icon>
+        </template>
+        Laboratorio
+      </v-list-item>
+
       <v-list-item nuxt to="/test">
         <template v-slot:prepend>
           <v-icon icon="mdi-flask"></v-icon>

@@ -4,6 +4,7 @@ import {
   bodyNewUserSchema,
   itemSchema,
   manufacturerSchema,
+  bodyLaboratorySchema,
 } from '../../schemas/schemas';
 import Ajv from 'ajv/dist/2020';
 
@@ -35,4 +36,14 @@ export const validateManufacturer = (manufacturer: Object) => {
   const validator = new Ajv().compile(manufacturerSchema);
 
   return validator(manufacturer);
+};
+
+export const validateBodyLaboratory = (body: Object) => {
+  const validator = new Ajv({ useDefaults: true, allErrors: true }).compile(
+    bodyLaboratorySchema
+  );
+
+  const validBody = validator(body);
+  const errorBody = validator.errors;
+  return { validBody, errorBody };
 };
