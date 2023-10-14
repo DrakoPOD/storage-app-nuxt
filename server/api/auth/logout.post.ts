@@ -14,7 +14,8 @@ export default defineEventHandler(async (event) => {
   const data = {
     token,
     email: payload.email,
-    id: payload.id,
+    user_id: payload.id,
+    session_id: payload.sessionID,
     expires: payload.exp,
     expireAt: new Date(payload.exp! * 1000),
   };
@@ -28,18 +29,18 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const docToken = await coll.findOne({ token });
+  const docToken = await coll!.findOne({ token });
 
   if (docToken) {
     setResponseStatus(event, 400);
     return { message: 'Bad request' };
   }
 
-  coll.createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 });
+  coll!.createIndex({ expireAt: 1 }, { expireAfterSeconds: 0 });
 
-  const result = await coll.insertOne(data);
+  const result = await coll!.insertOne(data);
 
-  client.close();
+  client!.close();
 
   setResponseStatus(event, 200);
   return { message: 'User logged out' };

@@ -28,10 +28,13 @@
 </template>
 
 <script setup lang="ts">
-import { VForm } from 'vuetify/components'
+import { IUserSession } from '@/types/user';
+import { VForm } from 'vuetify/components';
+
 definePageMeta({
   layout: "login-layout",
 });
+
 const user = ref({ email: "", password: "" });
 const loginFailed = ref(false);
 const isSubmitting = ref(false);
@@ -39,6 +42,8 @@ const isSubmitting = ref(false);
 const msg = ref("");
 
 const myForm = ref(VForm);
+
+const userSession = useUserSession();
 
 const rules = ref({
   email: (value: any) => !value ? 'Required.' : value.length > 3 || 'Too short',
@@ -56,10 +61,10 @@ async function logUser() {
   loginFailed.value = false;
   try {
     console.log('fetching')
-    const { data, error, status } = await useFetch('/api/auth/login', { method: 'POST', watch: false, body: user.value, server: false })
+    const { data, error, status } = await useFetch<IUserSession>('/api/auth/login', { method: 'POST', watch: false, body: user.value, server: false })
     if (status.value === "success") {
-      console.log(data.value)
-      console.log('redirecting')
+      userSession.value = data.value!;
+
       navigateTo('/')
     } else {
       if (error.value?.statusCode === 409) {

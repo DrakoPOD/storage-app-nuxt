@@ -32,57 +32,25 @@
         </template>
         test
       </v-list-item>
-      <v-list-item nuxt to="/adminPanel">
+      <v-list-item nuxt to="/adminPanel" v-if="userSession.role == 0">
         <template v-slot:prepend>
           <v-icon icon="mdi-shield-account"></v-icon>
         </template>
         Admin
       </v-list-item>
     </v-list>
-    <template v-slot:append>
-
-      <v-list>
-        <v-list-item>
-          <template v-slot:prepend>
-            <v-icon icon="mdi-account"></v-icon>
-          </template>
-          Profile
-        </v-list-item>
-        <v-list-item>
-          <template v-slot:prepend>
-            <v-icon icon="mdi-cog"></v-icon>
-          </template>
-          Settings
-        </v-list-item>
-        <v-list-item @click="logout">
-          <template v-slot:prepend>
-            <v-icon icon="mdi-logout"></v-icon>
-          </template>
-          Logout
-        </v-list-item>
-      </v-list>
-
-    </template>
   </v-navigation-drawer>
 </template>
 
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
 
+
+const userSession = useUserSession();
+
 const { mobile } = useDisplay();
 const openSide = useState('sideMenu', () => !mobile.value);
 
-async function logout() {
-  console.log('logout')
-  try {
-    const { data, error } = await useFetch('/api/auth/logout', { method: 'POST', watch: false })
-    navigateTo('/auth/login')
-  } catch (err) {
-    console.error(err);
-  }
-  // localStorage.removeItem('token');
-  // navigateTo('/auth/login')
-}
 </script>
 
 <style scoped></style>

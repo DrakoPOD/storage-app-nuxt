@@ -10,6 +10,7 @@ export default defineEventHandler(async (event) => {
     };
   } else {
     event.context.user = payload;
+    event.context.valid = valid;
     event.context.token = cookies.token;
     //console.log(payload);
   }

@@ -1,10 +1,6 @@
 <template>
-  <v-switch inset loading v-model="boolTheme" @change="toggleTheme">
-    <template v-slot:loader>
-      <v-icon size="small" color="black">
-        {{ boolTheme ? 'mdi-weather-night' : 'mdi-weather-sunny' }}
-      </v-icon>
-    </template>
+  <v-switch hide-details inset v-model="boolTheme" @change="toggleTheme" true-icon="mdi-weather-night"
+    false-icon="mdi-weather-sunny">
   </v-switch>
 </template>
 

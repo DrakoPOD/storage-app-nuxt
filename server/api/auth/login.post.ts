@@ -1,10 +1,10 @@
-import { Role } from '@/types/user.d';
+import { Role, IUserSession } from '@/types/user.d';
 import bcrypt from 'bcrypt';
 
 //import { getCollection } from '../../utils/database';
 
 export default defineEventHandler(async (event) => {
-  if (event.context.user) {
+  if (event.context.user && !event.context.valid) {
     throw createError({
       statusCode: 409,
       statusMessage: 'User already logged in',
@@ -82,5 +82,14 @@ export default defineEventHandler(async (event) => {
 
   client.close();
 
-  return { message: 'User logged in', role: user.role, sessionID };
+  const userData: IUserSession = {
+    id: user._id.toString(),
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    permissions: user.permissions,
+    profilePicture: user.profilePicture,
+  };
+
+  return userData;
 });

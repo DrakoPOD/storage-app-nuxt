@@ -9,11 +9,13 @@
 
 <script setup lang="ts">
 import { useTheme } from 'vuetify'
-import { useStorage } from '@vueuse/core'
+import { useStorage } from '@vueuse/core';
+
+
 onMounted(async () => {
   if (process.client) {
     const theme = useTheme();
-    const storeTheme = useStorage('theme', { theme: 'light' }, localStorage)
+    const storeTheme = useStorage('theme', { theme: 'light' })
     theme.global.name.value = storeTheme.value.theme;
   }
 });

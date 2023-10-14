@@ -50,3 +50,12 @@ export interface INewUser {
   role: Role;
   permissions: Permission[];
 }
+
+export interface IUserSession {
+  id: string;
+  profilePicture: string | null;
+  name: string;
+  email: string;
+  role: Role | null;
+  permissions: Permission[];
+}

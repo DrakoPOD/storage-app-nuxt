@@ -5,7 +5,8 @@
     "libphonenumber",
     "unmaskedvalue",
     "vuetify",
-    "Vuetify"
+    "Vuetify",
+    "vueuse"
   ],
   "spellright.language": ["es"],
   "spellright.documentTypes": ["markdown", "latex", "plaintext"]

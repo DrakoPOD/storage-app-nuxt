@@ -4,17 +4,22 @@
       <v-app-bar-nav-icon @click="toggleSide"></v-app-bar-nav-icon>
     </template>
     <v-app-bar-title>
-      My APP
+      {{ appTitle }}
     </v-app-bar-title>
     <v-spacer></v-spacer>
     <ThemeMode />
+    <template #append>
+
+      <UserMenu />
+    </template>
   </v-app-bar>
 </template>
 
 <script setup lang="ts">
-import MenuIcon from 'vue-material-design-icons/Menu.vue';
+
 
 const openSide = useState('sideMenu', () => false);
+const appTitle = useTitle()
 
 const toggleSide = () => {
   openSide.value = !openSide.value;

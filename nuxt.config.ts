@@ -13,6 +13,7 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify'],
   },
+  modules: ['@vueuse/nuxt'],
   vite: {
     server: {
       fs: {
