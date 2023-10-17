@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
       statusMessage: 'Forbidden',
     });
   }
-  const user: UserPayload = event.context.user;
+  const user = event.context.user;
 
   if (user.role !== Role.ADMIN) {
     throw createError({

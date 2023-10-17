@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
+    //"allowSyntheticDefaultImports": true,
     "paths": {
       "@/types/*": ["../types/*.d.ts"],
       "@/utils/*": ["../utils/*.ts"]
     }
   },
+  "files": ["../types/extendTypes.d.ts"],
   "extends": "../.nuxt/tsconfig.server.json"
 }
