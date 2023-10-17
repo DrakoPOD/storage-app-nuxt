@@ -3,14 +3,20 @@ import { H3Event } from 'h3';
 
 export const authUser = async (
   event: H3Event,
-  role: Role,
+  role: Role[],
   permissions: Permission | null = null,
   allowUser: string | string[] | null = null
 ) => {
   const user = event.context.user;
 
-  if (user.role !== role) {
+  if (!user) {
     return false;
+  }
+
+  if (role) {
+    if (!role.includes(user.role)) {
+      return false;
+    }
   }
 
   if (permissions) {
