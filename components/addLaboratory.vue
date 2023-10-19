@@ -1,10 +1,13 @@
 <template>
-  <v-btn>
+  <v-btn @click="emits('update:dialog', true)" variant="outlined">
+    <template #prepend>
+      <v-icon size="25">mdi-flask-plus</v-icon>
+    </template>
     Nuevo Laboratorio
-    <v-dialog persistent v-model="dialog" activator="parent">
+    <v-dialog persistent v-model="props.dialog">
       <v-card :disabled="submitting">
         <v-card-title>
-          Add new laboratory
+          {{ editing ? 'Editar laboratorio' : 'Nuevo laboratorio' }}
         </v-card-title>
         <v-card-text>
           <v-form ref="myForm">
@@ -34,8 +37,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn @click="addLab">Añadir</v-btn>
-          <v-btn @click="dialog = false">cerrar</v-btn>
+          <v-btn @click="pushLab">Guardar</v-btn>
+          <v-btn @click="close()">cerrar</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -43,9 +46,27 @@
 </template>
 
 <script setup lang="ts">
+import { ILaboratory, INewLaboratory } from '@/types/laboratory';
 import { VForm } from 'vuetify/components'
 
-const dialog = ref(false);
+const props = defineProps({
+  lab: {
+    type: Object,
+    default: null
+  },
+  dialog: {
+    type: Boolean,
+    default: false
+  },
+  index: {
+    type: null,
+    default: null
+  }
+})
+
+const emits = defineEmits(['update:dialog', 'update:lab', 'edited', 'newLab'])
+
+const editing = ref(false);
 
 const myForm = ref(VForm);
 
@@ -53,12 +74,12 @@ const teachers = ref<any>([])
 
 const submitting = ref(false)
 
-const lab = ref({
+const lab = ref<ILaboratory | INewLaboratory>({
   name: '',
   code: '',
-  teacher: null,
-  area: null,
-  building: null,
+  teacher: undefined,
+  area: undefined,
+  building: undefined,
 })
 
 const rules = {
@@ -82,11 +103,43 @@ async function getTeachers() {
   }
 }
 
-onBeforeMount(async () => {
-  console.log('mounted')
+watch(() => props.dialog, (value) => {
+  if (value) {
+    if (props.lab) {
+      lab.value = {
+        _id: props.lab._id,
+        name: props.lab.name,
+        code: props.lab.code,
+        teacher: props.lab.teacher,
+        area: props.lab.area,
+        building: props.lab.building,
+      }
+      editing.value = true
+    }
+  }
+  else {
+    lab.value = {
+      name: '',
+      code: '',
+      teacher: undefined,
+      area: undefined,
+      building: undefined,
+    }
+  }
 })
 
-async function addLab() {
+onBeforeMount(async () => {
+
+})
+
+
+async function close() {
+  editing.value = false
+  emits('update:lab', null)
+  emits('update:dialog', false)
+}
+
+async function pushLab() {
   if (submitting.value) return
 
   submitting.value = true
@@ -95,8 +148,10 @@ async function addLab() {
     console.log('invalid')
     return
   }
-  const { data, error } = await useFetch('/api/laboratory/add-laboratory', {
-    method: 'POST',
+
+
+  const { data, error } = await useFetch(editing.value ? '/api/laboratory/update-laboratory' : '/api/laboratory/add-laboratory', {
+    method: editing.value ? 'PUT' : 'POST',
     body: lab,
     watch: false
   })
@@ -104,16 +159,14 @@ async function addLab() {
     console.log(error.value)
     submitting.value = false
   } else {
-    lab.value = {
-      name: '',
-      code: '',
-      teacher: null,
-      area: null,
-      building: null,
-    }
+    if (editing.value) {
+      emits('edited', { lab: lab.value, index: props.index })
+    } else (
+      emits('newLab')
+    )
     console.log(data.value)
     submitting.value = false
-    dialog.value = false
+    close()
   }
 }
 </script>

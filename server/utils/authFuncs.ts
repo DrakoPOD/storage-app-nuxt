@@ -1,4 +1,4 @@
-import { Role, Permission } from '@/types/user';
+import { Role, Permission } from '@/types/user.d';
 import { H3Event } from 'h3';
 
 export const authUser = async (

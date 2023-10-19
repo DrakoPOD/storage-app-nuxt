@@ -3,7 +3,8 @@ import { Role } from '@/types/user.d';
 export default defineNuxtRouteMiddleware(async (to, from) => {
   if (process.client) {
     const userSession = useUserSession();
-    if (userSession.role == 0) return;
+
+    if (userSession.value.role == Role.ADMIN) return;
     else {
       return navigateTo('/');
     }
