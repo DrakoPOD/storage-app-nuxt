@@ -1,6 +1,6 @@
 import { useStorage, StorageSerializers } from '@vueuse/core';
 
-import { IUserSession } from '@/types/user';
+import type { IUserSession } from '@/types/user';
 
 export const useUserSession = () =>
   useStorage<IUserSession>(

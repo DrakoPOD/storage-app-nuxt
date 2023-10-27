@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { ILaboratory, INewLaboratory } from '@/types/laboratory';
+import type { ILaboratory, INewLaboratory } from '@/types/laboratory';
 import { VForm } from 'vuetify/components'
 
 const props = defineProps({

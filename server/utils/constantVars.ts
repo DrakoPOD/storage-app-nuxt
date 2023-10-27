@@ -1,4 +1,4 @@
-import { IDatabaseNames } from '@/types/api';
+import type { IDatabaseNames } from '@/types/api';
 
 export const databaseNames: IDatabaseNames = {
   manufacturer: {

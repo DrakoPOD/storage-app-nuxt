@@ -18,7 +18,7 @@
 import {
   VDataTable
 } from "vuetify/labs/VDataTable";
-import { userFetched } from '@/types/user';
+import type { userFetched } from '@/types/user';
 import Modal from "../../layouts/modal.vue";
 
 const users = ref<userFetched[]>([]);

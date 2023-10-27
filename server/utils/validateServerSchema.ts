@@ -1,3 +1,4 @@
+import { truncate } from 'fs';
 import {
   bodySchema,
   queryUserSchema,
@@ -27,9 +28,10 @@ export const validateNewUser = (body: Object) => {
 };
 
 export const validateItem = (item: Object) => {
-  const validator = new Ajv().compile(itemSchema);
-
-  return validator(item);
+  const validator = new Ajv({ allErrors: true }).compile(itemSchema);
+  const valid = validator(item);
+  const errors = validator.errors;
+  return { valid, errors };
 };
 
 export const validateManufacturer = (manufacturer: Object) => {

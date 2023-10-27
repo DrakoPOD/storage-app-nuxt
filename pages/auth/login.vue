@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { IUserSession } from '@/types/user';
+import type { IUserSession } from '@/types/user';
 import { VForm } from 'vuetify/components';
 
 definePageMeta({

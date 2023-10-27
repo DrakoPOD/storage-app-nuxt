@@ -4,38 +4,60 @@
     <v-container>
       <v-row>
         <v-col cols="12" sm="6">
-          <v-text-field :rules="[minChars]" v-model="item.name" placeholder="Ej. Sensor de temperatura" label="Nombre" />
+          <v-text-field density="compact" :rules="[minChars]" v-model="item.name" placeholder="Ej. Sensor de temperatura"
+            label="Nombre" />
 
         </v-col>
         <v-col cols="12" sm="6">
-          <v-text-field v-model="item.description" placeholder="Ej. Sensor que mide temperatura del agua"
-            label="Descripción" />
+          <v-text-field density="compact" v-model="item.description"
+            placeholder="Ej. Sensor que mide temperatura del agua" label="Descripción" />
         </v-col>
       </v-row>
       <v-row>
 
         <v-col cols="12" sm="6">
-          <v-text-field type="number" v-model="item.quantity" placeholder="Ej. 42" label="Cantidad" />
+          <v-select density="compact" v-model="item.itemType" :items="itemsTypes" item-value="key"
+            label="Tipo de artículo" @update:modelValue="() => item.quantity.unitType = unitsTypesSelect[0].key">
+            <template #item="{ props, item }">
+              <v-list-item v-bind="props" :subtitle="item.raw.subtitle">
+              </v-list-item>
+            </template>
+          </v-select>
         </v-col>
         <v-col cols="12" sm="6">
-          <v-text-field type="number" v-model="item.cost" placeholder="Ej. 1500" label="Costo" />
+          <v-text-field density="compact" type="number" v-model.number="item.cost" placeholder="Ej. 1500" label="Costo" />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12" sm="4">
+          <v-select density="compact" v-model="item.quantity.unitType" :items="unitsTypesSelect" item-value="key"
+            title="title" label="Tipo de cuantificación"
+            @update:modelValue="() => item.quantity.unit = unitsSelect[0]"></v-select>
+        </v-col>
+        <v-col cols="6" sm="4">
+          <v-text-field density="compact" type="number" v-model.number="item.quantity.value" placeholder="Ej. 42"
+            label="Cantidad" />
+        </v-col>
+        <v-col cols="6" sm="4">
+          <v-select density="compact" v-model="item.quantity.unit" :items="unitsSelect" label="Unidad"></v-select>
         </v-col>
       </v-row>
       <v-row>
         <v-col>
-          <v-text-field type="date" v-model="item.addedDate" placeholder="20/2/2020" label="Fecha de adquisición" />
+          <v-text-field density="compact" type="date" v-model="item.addedDate" placeholder="20/2/2020"
+            label="Fecha de adquisición" />
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12" sm="6">
-          <v-text-field type="text" v-model="item.brand" placeholder="Ej. Vernier" label="Marca" />
+          <v-text-field density="compact" type="text" v-model="item.brand" placeholder="Ej. Vernier" label="Marca" />
 
         </v-col>
         <v-col cols="12" sm="6">
-          <v-select name="manufacturer" v-model="item.manufacturer" label="Fabricante" :items="manufacturerList"
-            item-title="name" item-value="_id">
+          <v-select density="compact" name="manufacturer" v-model="item.manufacturer" label="Fabricante"
+            :items="manufacturerList" item-title="name" item-value="_id">
             <template v-slot:prepend-item>
-              <v-list-item title="Añadir fabricante" ripple @click="openModal = true">
+              <v-list-item density="compact" title="Añadir fabricante" ripple @click="openModal = true">
 
               </v-list-item>
               <v-divider class="mt-2"></v-divider>
@@ -46,30 +68,62 @@
       </v-row>
       <v-row>
         <v-col cols="12" sm="6">
-          <v-text-field v-model="item.category" placeholder="Ej. Sensor" label="Categoría" />
+          <v-text-field density="compact" v-model="item.category" placeholder="Ej. Sensor" label="Categoría" />
 
         </v-col>
         <v-col cols="12" sm="6">
-          <v-select v-model="item.laboratory" :items="labList" item-title="name" item-value="value" label="Laboratorio">
+          <v-select density="compact" v-model="item.laboratory" :items="labList" item-title="name" item-value="value"
+            label="Laboratorio">
           </v-select>
         </v-col>
       </v-row>
 
       <v-row>
         <v-col>
-          <v-text-field v-model="item.topics" placeholder="Ej. Cinemática" label="Tema" />
+          <v-sheet v-if="item.topics.length < 1">
+            <v-container class="d-flex justify-center align-center">
+              <p>Sin temas</p>
+            </v-container>
+          </v-sheet>
+          <v-sheet v-else v-for="topics, i in item.topics">
+            <v-container>
+              <v-row>
+                <v-col cols="11">
+                  <v-text-field density="compact" v-model="item.topics[i]" placeholder="Ej. Cinemática" label="Tema" />
+                </v-col>
+                <v-col cols="1" class="d-flex justify-center align-center">
+                  <v-btn icon="mdi-delete" color="error" @click="item.topics.splice(i, 1)">
 
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-sheet>
+        </v-col>
+        <v-col cols="12" class="d-flex justify-center align-center">
+          <v-btn @click="item.topics.push('')">
+            Agregar tema
+          </v-btn>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12">
+          <v-sheet v-if="item.experiments.length < 1">
+            <v-container>
+              <v-row>
+                <v-col class="d-flex justify-center align-center">
+                  <p>Sin experimentos</p>
+                </v-col>
 
+              </v-row>
+            </v-container>
+          </v-sheet>
           <v-sheet v-for="experiment, i in item.experiments" class="ma-1">
             <v-container>
               <v-row>
 
                 <v-col cols="11">
-                  <v-text-field v-model="item.experiments[i].title" placeholder="Ej. Pista inclinada"
+                  <v-text-field density="compact" v-model="item.experiments[i].title" placeholder="Ej. Pista inclinada"
                     label="Experimentos" />
                 </v-col>
                 <v-col cols="1" class="d-flex justify-center align-center">
@@ -78,13 +132,14 @@
                   </v-btn>
                 </v-col>
                 <v-col cols="12">
-                  <v-text-field v-model="item.experiments[i].description" label="Descripción"></v-text-field>
+                  <v-text-field density="compact" v-model="item.experiments[i].description"
+                    label="Descripción"></v-text-field>
                 </v-col>
               </v-row>
             </v-container>
           </v-sheet>
         </v-col>
-        <v-col cols="12">
+        <v-col cols="12" class="d-flex justify-center align-center">
           <v-btn @click="item.experiments.push({ title: '', description: '' })">
             Agregar experimento
           </v-btn>
@@ -92,15 +147,23 @@
       </v-row>
       <v-row>
         <v-col>
-          <v-text-field v-model="item.storageConditions" placeholder="Ej. Seco, oscuro, ventilado"
-            label="Condiciones de almacenamiento" />
+          <v-card>
+            <v-card-text>
+              <v-checkbox density="compact" v-model="needStorage" label="Condiciones de almacenamiento">
+              </v-checkbox>
+            </v-card-text>
+            <template v-if="needStorage">
+            </template>
+          </v-card>
+          <!-- <v-text-field density="compact" v-model="item.storageConditions" placeholder="Ej. Seco, oscuro, ventilado"
+            label="Condiciones de almacenamiento" /> -->
 
         </v-col>
       </v-row>
       <v-row>
         <v-col>
-          <v-checkbox v-model="item.functional" label="Funcional" />
-          <v-checkbox v-model="item.broken" label="Roto" />
+          <v-checkbox density="compact" v-model="item.functional" label="Funcional" />
+          <v-checkbox density="compact" v-model="item.broken" label="Roto" />
 
         </v-col>
       </v-row>
@@ -111,24 +174,23 @@
 
         <v-row>
           <v-col cols="12">
-            <v-text-field v-model="item.brokenDescription" placeholder="Ej. Se rompió una pieza al caer"
+            <v-text-field density="compact" v-model="item.brokenDescription" placeholder="Ej. Se rompió una pieza al caer"
               label="Descripción de rotura" />
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="12" sm="6">
-            <v-text-field type="datetime" label="Fecha de rotura" />
+            <v-text-field density="compact" type="datetime" label="Fecha de rotura" />
 
           </v-col>
           <v-col cols="12" sm="6">
-            <v-text-field v-model="item.brokenBy" placeholder="Ej. Marco Antonio" label="Roto por" />
+            <v-text-field density="compact" v-model="item.brokenBy" placeholder="Ej. Marco Antonio" label="Roto por" />
           </v-col>
         </v-row>
       </template>
       <v-row>
         <v-col cols="12">
           <v-btn type="submit" block>Enviar</v-btn>
-
         </v-col>
       </v-row>
     </v-container>
@@ -138,10 +200,13 @@
 </template>
 
 <script setup lang="ts">
-import { Manufacturer, PhysicsItem } from '@/types/item';
+import moment from 'moment'
+import type { Manufacturer, PhysicsItem, EnumItemType } from '@/types/item';
 
 const manufacturerList = ref<Manufacturer[]>([])
 const openModal = ref(false)
+
+const needStorage = ref(false)
 
 const labList = ref([
   {
@@ -158,13 +223,19 @@ const labList = ref([
   }
 ])
 
+
 const item = ref<PhysicsItem>({
   name: '',
   description: '',
-  quantity: 0,
+  itemType: ItemTypes.SENSOR,
+  quantity: {
+    value: 0,
+    unit: 'unit',
+    unitType: 'unit'
+  },
   cost: 0,
-  addedDate: (new Date()).getTime(),
-  lastUpdated: (new Date()).getTime(),
+  addedDate: moment().format('YYYY-MM-DD'),
+  lastUpdated: moment().format('YYYY-MM-DD'),
   brand: null,
   manufacturer: null,
   category: '',
@@ -173,6 +244,7 @@ const item = ref<PhysicsItem>({
   experiments: [],
   storageConditions: null,
   tags: [],
+  expiryDate: null,
 
   functional: true,
   broken: false,
@@ -184,10 +256,17 @@ const item = ref<PhysicsItem>({
   serialNumber: '',
   code: '',
 })
+const unitsTypesSelect = computed(() => ItemQuantityTypes[item.value.itemType])
+
+const unitsSelect = computed(() => Units[item.value.quantity.unitType])
 
 const file = ref<File[] | undefined>();
 const myImg = ref<string | undefined>('https://cdn.vuetifyjs.com/images/parallax/material.jpg');
 const { minChars } = useInputVuetify;
+
+const resetUnit = async () => {
+  item.value.quantity.unit = unitsSelect.value[0]
+}
 
 const submit = async () => {
   const { valid, errors } = useValidateItem(item.value)
@@ -196,10 +275,25 @@ const submit = async () => {
     console.log('invalid')
     return
   }
-  const res = await usePost('api/item/addItem', { db: { type: 'item' }, data: item.value })
+  const res = await useFetch('api/item/addItem', { method: 'POST', body: item.value, watch: false })
 
   console.log(res)
 }
+
+const itemsTypes: Array<{ title: string, subtitle?: string, key: EnumItemType }> = [
+  { title: 'Orgánico', subtitle: 'Materia orgánica', key: ItemTypes.BIOLOGICAL },
+  { title: 'Químico', subtitle: 'Compuestos químicos (Cloro, Agua, ...)', key: ItemTypes.CHEMICAL },
+  { title: 'Consumible', subtitle: 'Productos de usos limitados (Fósforos, Guantes desechables, ...)', key: ItemTypes.CONSUMABLE },
+  { title: 'Sensor', subtitle: 'Sensor de Temperatura, Tester, ...', key: ItemTypes.SENSOR },
+  { title: 'Protección', subtitle: 'Gafas, Guantes, Batas', key: ItemTypes.SAFETY },
+  { title: 'Herramienta', subtitle: 'Taladro, Martillo, Destornillador...', key: ItemTypes.TOOL },
+  { title: 'Electrónico', subtitle: 'Arduino, RaspBerry Pi, circuitos, ...', key: ItemTypes.ELECTRONICS },
+  { title: 'Computadora', subtitle: 'Laptops, Desktops, calculadoras, ...', key: ItemTypes.COMPUTER },
+  { title: 'Mueble', subtitle: 'Sillas, Mesas, Escritorio', key: ItemTypes.FURNITURE },
+  { title: 'Limpieza', subtitle: 'Trapero, Escoba, Aspirador', key: ItemTypes.CLEANING },
+  { title: 'Otro', subtitle: '', key: ItemTypes.OTHER },
+  // { title: '', key:},
+]
 
 const getManufacturers = async () => {
   const { data, error } = await useFetch<Manufacturer[]>('/api/manufacturer/allManufacturer',
@@ -231,7 +325,7 @@ function selectedOption(val: string) {
 }
 
 async function onFileChange(event: any) {
-  if (!file.value || file.value.length > 0) {
+  if (!file.value || file.value.length < 1) {
     console.log('not file')
     myImg.value = 'https://cdn.vuetifyjs.com/images/parallax/material.jpg'
     return
@@ -249,8 +343,8 @@ const addDate = (event: Event, varDate: Date) => {
   varDate = (event.target as HTMLInputElement).valueAsDate!
 }
 
-onMounted(() => {
-  getManufacturers()
+onMounted(async () => {
+  await getManufacturers()
 })
 </script>
 

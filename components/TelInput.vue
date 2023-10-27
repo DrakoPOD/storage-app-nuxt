@@ -35,7 +35,7 @@ import { countries } from 'countries-list';
 
 import {
   AsYouType,
-  CountryCode,
+  type CountryCode,
   getCountries,
   getCountryCallingCode,
 } from 'libphonenumber-js/max';

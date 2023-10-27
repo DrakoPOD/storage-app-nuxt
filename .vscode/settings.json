@@ -9,5 +9,6 @@
     "vueuse"
   ],
   "spellright.language": ["es"],
-  "spellright.documentTypes": ["markdown", "latex", "plaintext"]
+  "spellright.documentTypes": ["markdown", "latex", "plaintext"],
+  "typescript.tsserver.experimental.enableProjectDiagnostics": true
 }

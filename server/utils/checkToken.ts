@@ -1,4 +1,4 @@
-import { UserPayload } from '@/types/user';
+import type { UserPayload } from '@/types/user';
 import { getCollection } from './database';
 import { default as jwt } from 'jsonwebtoken';
 

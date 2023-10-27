@@ -1,7 +1,8 @@
-import { JSONSchemaType } from 'ajv';
+import type { JSONSchemaType } from 'ajv';
 import type { Item, Manufacturer, StorageCondition } from '../types/item.d';
 import type { INewUser, IQueryUser } from '@/types/user';
-import { INewLaboratory } from '@/types/laboratory';
+import type { INewLaboratory } from '@/types/laboratory';
+import { allUnitsArray } from '../utils/unitsEnums';
 
 export const storageConditionsSchema: JSONSchemaType<StorageCondition> = {
   $schema: 'https://json-schema.org/draft/2020-12/schema',
@@ -118,18 +119,32 @@ export const itemSchema: JSONSchemaType<Item> = {
     },
     quantity: {
       description: 'Quantity of the item',
-      type: 'number',
-      minimum: 0,
+      type: 'object',
+      properties: {
+        unit: {
+          description: 'Unit of the item',
+          type: 'string',
+          enum: allUnitsArray,
+        },
+        unitType: {
+          type: 'string',
+          enum: ['length', 'mass', 'volume', 'temperature', 'pressure', 'unit'],
+        },
+        value: {
+          type: 'number',
+        },
+      },
+      required: ['unit', 'value', 'unitType'],
     },
     addedDate: {
       description: 'Date when the item was added',
       type: 'string',
-      format: 'date-time',
+      //format: 'date-time',
     },
     lastUpdated: {
       description: 'Date when the item was last updated',
       type: 'string',
-      format: 'date-time',
+      //format: 'date-time',
     },
     brand: {
       description: 'Brand of the item',
@@ -171,14 +186,6 @@ export const itemSchema: JSONSchemaType<Item> = {
     laboratory: {
       description: 'Laboratory of the item',
       type: 'string',
-      enum: [
-        'biology',
-        'chemistry',
-        'physics',
-        'computer-science',
-        'mathematics',
-        'other',
-      ],
     },
     topics: {
       description: 'Units, classes or topics of the item should be used for',
@@ -186,6 +193,7 @@ export const itemSchema: JSONSchemaType<Item> = {
       items: {
         type: 'string',
       },
+      minItems: 0,
     },
     experiments: {
       description: 'Experiments the item was used for',
@@ -214,6 +222,28 @@ export const itemSchema: JSONSchemaType<Item> = {
       description: 'Code of the item for internal use',
       type: 'string',
     },
+    expiryDate: {
+      description: 'Expiry date of the item',
+      type: 'string',
+      nullable: true,
+    },
+    itemType: {
+      description: 'Type of the item',
+      type: 'string',
+      enum: [
+        'SEN',
+        'CHE',
+        'BIO',
+        'SAF',
+        'TOL',
+        'ELE',
+        'COM',
+        'FUR',
+        'OTH',
+        'CLR',
+        'CON',
+      ],
+    },
   },
   required: [
     'name',
@@ -229,6 +259,7 @@ export const itemSchema: JSONSchemaType<Item> = {
     'topics',
     'experiments',
     'code',
+    'itemType',
   ],
 };
 

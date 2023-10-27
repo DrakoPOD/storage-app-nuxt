@@ -4,12 +4,13 @@ const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/';
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<any>(event);
-  const data = body as Body;
+  const data = body.data as any;
 
-  const valid = await validateItem(data);
+  const { valid, errors } = await validateItem(data);
 
   if (!valid) {
     setResponseStatus(event, 400);
+    console.log(data);
     return { message: 'Invalid data' };
   }
 

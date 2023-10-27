@@ -1,7 +1,5 @@
 import { Collection, MongoClient, ObjectId } from 'mongodb';
 
-import { databaseNames } from './constantVars';
-import { log } from '@/utils/utils';
 // const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/';
 
 let uri = '';
@@ -18,6 +16,12 @@ try {
 }
 
 export const customID = ObjectId;
+
+export const MONGODB = process.env.MONGO_DB || 'test';
+export const USER_COLLECTION = process.env.USER_COLLECTION || 'users';
+export const ITEM_COLLECTION = process.env.ITEM_COLLECTION || 'items';
+export const MANUFACTURER_COLLECTION =
+  process.env.MANUFACTURER_COLLECTION || 'manufacturers';
 
 export const connectMongo = async () => {
   return new Promise<{ client?: MongoClient; error?: any }>(

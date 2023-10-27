@@ -1,5 +1,5 @@
 import { Laboratory } from '@/types/enums';
-import { Item } from '@/types/item';
+import type { Item } from '@/types/item';
 
 const itemValidator = {
   name: (v: string) => v.length > 3,
