@@ -1,6 +1,6 @@
 <template>
   <add-image />
-  <v-form @submit.prevent="submit">
+  <v-form @submit.prevent="submit" :disabled="submitting">
     <v-container>
       <v-row>
         <v-col cols="12" sm="6">
@@ -16,7 +16,7 @@
       <v-row>
 
         <v-col cols="12" sm="6">
-          <v-select density="compact" v-model="item.itemType" :items="itemsTypes" item-value="key"
+          <v-select density="compact" v-model="item.category" :items="itemsTypes" item-value="key"
             label="Tipo de artículo" @update:modelValue="() => item.quantity.unitType = unitsTypesSelect[0].key">
             <template #item="{ props, item }">
               <v-list-item v-bind="props" :subtitle="item.raw.subtitle">
@@ -44,7 +44,7 @@
       </v-row>
       <v-row>
         <v-col>
-          <v-text-field density="compact" type="date" v-model="item.addedDate" placeholder="20/2/2020"
+          <v-text-field density="compact" type="date" v-model="item.acquisitionDate" placeholder="20/2/2020"
             label="Fecha de adquisición" />
         </v-col>
       </v-row>
@@ -149,45 +149,40 @@
         <v-col>
           <v-card>
             <v-card-text>
-              <v-checkbox density="compact" v-model="needStorage" label="Condiciones de almacenamiento">
+              <v-checkbox hide-details density="compact" v-model="needStorage" label="Condiciones de almacenamiento"
+                @update:model-value="(val) => val ? item.storageConditions = storageCondition : item.storageConditions = null">
               </v-checkbox>
             </v-card-text>
             <template v-if="needStorage">
+              <v-card-text>
+                Temperatura
+              </v-card-text>
+              <v-card-item>
+
+                <v-row>
+                  <v-col cols="5">
+                    <v-text-field density="compact" type="number" v-model.number="storageCondition.temperature.min"
+                      placeholder="Ej. 20" label="Mínima" />
+                  </v-col>
+                  <v-col cols="5">
+                    <v-text-field density="compact" type="number" v-model.number="storageCondition.temperature.max"
+                      placeholder="Ej. 30" label="Máxima" />
+                  </v-col>
+                  <v-col cols="2">
+                    <v-select v-model="storageCondition.temperature.unit" density="compact" :items="Units.temperature"
+                      label="Unidad">
+                    </v-select>
+                  </v-col>
+                </v-row>
+              </v-card-item>
+              <v-card-item>
+                <v-textarea label="Precauciones"></v-textarea>
+              </v-card-item>
             </template>
           </v-card>
-          <!-- <v-text-field density="compact" v-model="item.storageConditions" placeholder="Ej. Seco, oscuro, ventilado"
-            label="Condiciones de almacenamiento" /> -->
-
         </v-col>
       </v-row>
-      <v-row>
-        <v-col>
-          <v-checkbox density="compact" v-model="item.functional" label="Funcional" />
-          <v-checkbox density="compact" v-model="item.broken" label="Roto" />
 
-        </v-col>
-      </v-row>
-      <v-row>
-
-      </v-row>
-      <template v-if="item.broken">
-
-        <v-row>
-          <v-col cols="12">
-            <v-text-field density="compact" v-model="item.brokenDescription" placeholder="Ej. Se rompió una pieza al caer"
-              label="Descripción de rotura" />
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" sm="6">
-            <v-text-field density="compact" type="datetime" label="Fecha de rotura" />
-
-          </v-col>
-          <v-col cols="12" sm="6">
-            <v-text-field density="compact" v-model="item.brokenBy" placeholder="Ej. Marco Antonio" label="Roto por" />
-          </v-col>
-        </v-row>
-      </template>
       <v-row>
         <v-col cols="12">
           <v-btn type="submit" block>Enviar</v-btn>
@@ -200,13 +195,17 @@
 </template>
 
 <script setup lang="ts">
-import moment from 'moment'
-import type { Manufacturer, PhysicsItem, EnumItemType } from '@/types/item';
+import moment from 'moment';
+import { useStorage } from '@vueuse/core';
+
+import type { Manufacturer, EnumItemType, INewItem, StorageConditions } from '@/types/item';
 
 const manufacturerList = ref<Manufacturer[]>([])
 const openModal = ref(false)
 
 const needStorage = ref(false)
+
+const submitting = ref(false)
 
 const labList = ref([
   {
@@ -223,40 +222,54 @@ const labList = ref([
   }
 ])
 
+const cleanStorageCondition = (): StorageConditions => {
+  return {
+    temperature: {
+      min: 0,
+      max: 100,
+      unit: 'degC'
+    },
+    humidity: {
+      min: 0,
+      max: 100,
+    },
+    light: 0,
+    pressure: {
+      min: 0,
+      max: 100,
+    },
+    caution: '',
+    protection: [],
+  }
+}
 
-const item = ref<PhysicsItem>({
-  name: '',
-  description: '',
-  itemType: ItemTypes.SENSOR,
-  quantity: {
-    value: 0,
-    unit: 'unit',
-    unitType: 'unit'
-  },
-  cost: 0,
-  addedDate: moment().format('YYYY-MM-DD'),
-  lastUpdated: moment().format('YYYY-MM-DD'),
-  brand: null,
-  manufacturer: null,
-  category: '',
-  laboratory: '',
-  topics: [],
-  experiments: [],
-  storageConditions: null,
-  tags: [],
-  expiryDate: null,
+const cleanItem = (): INewItem => {
+  return {
+    name: '',
+    description: '',
+    category: 'SEN',
+    quantity: {
+      value: 0,
+      unit: 'unit',
+      unitType: 'unit'
+    },
+    cost: 0,
+    acquisitionDate: moment().format('YYYY-MM-DD'),
+    brand: null,
+    manufacturer: null,
+    laboratory: '',
+    topics: [],
+    experiments: [],
+    storageConditions: null,
+    tags: [],
+    expiryDate: null,
+  }
+}
 
-  functional: true,
-  broken: false,
-  brokenDescription: '',
-  brokenDate: null,
-  brokenBy: '',
+const storageCondition = useStorage('storage-condition', cleanStorageCondition())
+const item = useStorage('form-item', cleanItem())
 
-  image: null,
-  serialNumber: '',
-  code: '',
-})
-const unitsTypesSelect = computed(() => ItemQuantityTypes[item.value.itemType])
+const unitsTypesSelect = computed(() => ItemQuantityTypes[item.value.category])
 
 const unitsSelect = computed(() => Units[item.value.quantity.unitType])
 
@@ -264,20 +277,25 @@ const file = ref<File[] | undefined>();
 const myImg = ref<string | undefined>('https://cdn.vuetifyjs.com/images/parallax/material.jpg');
 const { minChars } = useInputVuetify;
 
-const resetUnit = async () => {
-  item.value.quantity.unit = unitsSelect.value[0]
-}
-
 const submit = async () => {
+  if (submitting.value) return;
+  submitting.value = true
   const { valid, errors } = useValidateItem(item.value)
   if (!valid) {
     console.log(errors)
     console.log('invalid')
     return
   }
-  const res = await useFetch('api/item/addItem', { method: 'POST', body: item.value, watch: false })
+  const { data, error } = await useFetch('api/item/addItem', { method: 'POST', body: item.value, watch: false })
 
-  console.log(res)
+  if (error.value) {
+    console.log(error.value)
+    return
+  }
+  if (data.value) {
+    console.log(data.value)
+  }
+  submitting.value = false
 }
 
 const itemsTypes: Array<{ title: string, subtitle?: string, key: EnumItemType }> = [
@@ -309,18 +327,10 @@ const getManufacturers = async () => {
 
   if (error.value) {
     console.log(error.value)
-    return
   }
   if (data.value) {
     console.log(data.value)
     manufacturerList.value = data.value
-  }
-}
-
-function selectedOption(val: string) {
-  if (val === '0') {
-    openModal.value = true
-    item.value.manufacturer = null
   }
 }
 
@@ -339,11 +349,9 @@ async function onFileChange(event: any) {
   fr.readAsDataURL(file.value[0])
 }
 
-const addDate = (event: Event, varDate: Date) => {
-  varDate = (event.target as HTMLInputElement).valueAsDate!
-}
 
 onMounted(async () => {
+  await nextTick();
   await getManufacturers()
 })
 </script>

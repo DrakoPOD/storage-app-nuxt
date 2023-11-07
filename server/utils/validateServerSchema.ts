@@ -6,6 +6,7 @@ import {
   itemSchema,
   manufacturerSchema,
   bodyLaboratorySchema,
+  newItemSchema,
 } from '../../schemas/schemas';
 import Ajv from 'ajv/dist/2020';
 
@@ -25,6 +26,14 @@ export const validateNewUser = (body: Object) => {
   const validator = new Ajv().compile(bodyNewUserSchema);
 
   return validator(body);
+};
+
+export const validateNewItem = (item: Object) => {
+  const validator = new Ajv({ allErrors: true }).compile(newItemSchema);
+
+  const valid = validator(item);
+  const errors = validator.errors;
+  return { valid, errors };
 };
 
 export const validateItem = (item: Object) => {

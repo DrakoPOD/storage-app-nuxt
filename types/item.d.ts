@@ -1,5 +1,5 @@
 import type { ObjectId } from 'mongodb';
-import { UnitType, UnitTypesNames, AllUnits } from './units';
+import { UnitType, UnitTypesNames, AllUnits, UnitTemperature } from './units';
 
 import { ItemTypes, ItemStatus } from '../utils/itemsEnums';
 
@@ -26,30 +26,26 @@ export interface Manufacturer {
   website: string;
 }
 
-interface StorageCondition {
-  temperature: { min: number; max: number };
+interface StorageConditions {
+  temperature: { min: number; max: number; unit: UnitTemperature };
   humidity: { min: number; max: number };
   pressure?: { min: number; max: number };
   light?: number;
-  description: string;
   caution: string;
   protection: string[];
 }
 
-interface Item {
-  _id?: string;
+export interface INewItem {
   name: string;
   description: string;
-  itemType: EnumItemType;
+  category: EnumItemType;
   quantity: {
     value: number;
     unit: AllUnits;
     unitType: UnitTypesNames;
   };
   cost: number;
-  addedDate: Date | string | number;
-  lastUpdated: Date | string | number;
-  category: string;
+  acquisitionDate?: string | Date | null;
   laboratory: string;
   topics: string[];
   tags: string[];
@@ -58,14 +54,21 @@ interface Item {
     description: string;
   }[];
   expiryDate?: Date | string | null;
-  serialNumber: string;
-  code: string;
-  image?: string | null;
   brand?: string | null;
   manufacturer?: string | null;
-  storageConditions?: StorageCondition | object | null;
-  images?: string[];
+  storageConditions?: StorageConditions | null;
   notes?: string | null;
+}
+
+interface Item extends INewItem {
+  _id?: string;
+  serialNumber: string;
+  addedDate: Date | string | number;
+  lastUpdated: Date | string | number;
+  code: string;
+  image?: string | null;
+  images?: string[];
+  added_by: string;
 }
 
 export interface PhysicsItem extends Item {
