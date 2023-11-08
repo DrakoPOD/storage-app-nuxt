@@ -1,7 +1,4 @@
-export enum Laboratory {
-  Biology = 1,
-  Chemistry = 2,
-  Physics = 3,
-  Mathematics = 4,
-  Robotics = 5,
-}
+import { Laboratories } from '../utils/enumsObjects';
+
+export type EnumLaboratoryType =
+  (typeof Laboratories)[keyof typeof Laboratories];

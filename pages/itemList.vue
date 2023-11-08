@@ -4,6 +4,12 @@
       <v-icon color="success" v-if="item.functional">mdi-check</v-icon>
       <v-icon color="error" v-else>mdi-close</v-icon>
     </template>
+    <template #item.quantity="{ item }: { item: PhysicsItem }">
+      <p>{{ item.quantity.value }} {{ item.quantity.unit }}</p>
+    </template>
+    <template #item.laboratory="{ item }: { item: PhysicsItem }">
+      <p>{{ LaboratoriesNames[item.laboratory] }}</p>
+    </template>
   </v-data-table>
 </template>
 
@@ -17,7 +23,9 @@ const listItems = ref<PhysicsItem[]>([])
 const filters = ref<object>({})
 const loadingData = ref(true)
 
-const headers = ref([
+type Headers = InstanceType<typeof VDataTable>['headers']
+
+const headers = ref<Headers>([
   { title: 'Nombre', key: 'name', align: 'start' },
   { title: 'Cantidad', key: 'quantity', align: 'center' },
   { title: 'Laboratorio', key: 'laboratory', align: 'start' },

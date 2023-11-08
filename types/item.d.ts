@@ -3,6 +3,8 @@ import { UnitType, UnitTypesNames, AllUnits, UnitTemperature } from './units';
 
 import { ItemTypes, ItemStatus } from '../utils/itemsEnums';
 
+import { EnumLaboratoryType } from './enums';
+
 export type EnumItemType = (typeof ItemTypes)[keyof typeof ItemTypes];
 interface a {
   [key: keyof typeof ItemTypes]: String[];
@@ -46,7 +48,7 @@ export interface INewItem {
   };
   cost: number;
   acquisitionDate?: string | Date | null;
-  laboratory: string;
+  laboratory: EnumLaboratoryType;
   topics: string[];
   tags: string[];
   experiments: {

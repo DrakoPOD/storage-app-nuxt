@@ -8,6 +8,7 @@ import type {
 import type { INewUser, IQueryUser } from '@/types/user';
 import type { INewLaboratory } from '@/types/laboratory';
 import { allUnitsArray } from '../utils/unitsEnums';
+import { EnumsLaboratory } from '../utils/enumsObjects';
 
 export const storageConditionsSchema: JSONSchemaType<StorageConditions> = {
   $schema: 'https://json-schema.org/draft/2020-12/schema',
@@ -187,7 +188,8 @@ export const newItemSchema: JSONSchemaType<INewItem> = {
     },
     laboratory: {
       description: 'Laboratory of the item',
-      type: 'string',
+      type: 'number',
+      enum: EnumsLaboratory,
     },
     manufacturer: {
       description: 'Manufacturer of the item',
@@ -334,7 +336,8 @@ export const itemSchema: JSONSchemaType<Item> = {
     },
     laboratory: {
       description: 'Laboratory of the item',
-      type: 'string',
+      type: 'number',
+      enum: EnumsLaboratory,
     },
     topics: {
       description: 'Units, classes or topics of the item should be used for',
