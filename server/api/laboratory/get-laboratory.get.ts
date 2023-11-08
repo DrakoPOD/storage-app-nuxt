@@ -1,4 +1,7 @@
-import { IBodyAddLaboratory, IQueryGetLaboratory } from '@/types/laboratory';
+import type {
+  IBodyAddLaboratory,
+  IQueryGetLaboratory,
+} from '@/types/laboratory';
 import { ObjectId, FindOptions, Filter, Document } from 'mongodb';
 
 export default defineEventHandler(async (event) => {

@@ -1,6 +1,5 @@
-import { IQueryGetLaboratory } from '@/types/laboratory';
+import type { IQueryGetLaboratory } from '@/types/laboratory';
 import { ObjectId } from 'mongodb';
-import { Role } from '@/types/user.d';
 
 export default defineEventHandler(async (event) => {
   const query: IQueryGetLaboratory = getQuery(event);

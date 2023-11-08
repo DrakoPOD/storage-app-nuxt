@@ -1,6 +1,5 @@
-import { IBodyAddLaboratory, ILaboratory } from '@/types/laboratory';
+import type { IBodyAddLaboratory, ILaboratory } from '@/types/laboratory';
 import { ObjectId } from 'mongodb';
-import { Role } from '@/types/user.d';
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<IBodyAddLaboratory>(event);

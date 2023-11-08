@@ -1,5 +1,4 @@
-import { IQueryCheckLabCode } from '@/types/laboratory';
-import { Role } from '@/types/user.d';
+import type { IQueryCheckLabCode } from '@/types/laboratory';
 
 export default defineEventHandler(async (event) => {
   const query: IQueryCheckLabCode = getQuery(event);
