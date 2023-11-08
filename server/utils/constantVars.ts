@@ -1,5 +1,7 @@
 import type { IDatabaseNames } from '@/types/api';
 
+export { Role } from '@/utils/userPermits';
+
 export const databaseNames: IDatabaseNames = {
   manufacturer: {
     database: process.env.MONGO_DB ?? 'test',
