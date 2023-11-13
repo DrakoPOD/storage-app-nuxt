@@ -17,7 +17,7 @@
 <script setup lang="ts">
 import {
   VDataTable
-} from "vuetify/labs/VDataTable";
+} from "vuetify/components";
 import type { userFetched } from '@/types/user';
 import Modal from "../../layouts/modal.vue";
 

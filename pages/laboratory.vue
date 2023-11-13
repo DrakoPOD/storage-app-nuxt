@@ -78,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-import { VDataTable } from 'vuetify/labs/VDataTable'
+import { VDataTable } from 'vuetify/components'
 
 const headers = ref([
   { title: 'Código', key: 'code' },

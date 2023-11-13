@@ -9,6 +9,7 @@ import type { INewUser, IQueryUser } from '@/types/user';
 import type { INewLaboratory } from '@/types/laboratory';
 import { allUnitsArray } from '../utils/unitsEnums';
 import { EnumsLaboratory } from '../utils/enumsObjects';
+import { Role, userPermits } from '../utils/userPermits';
 
 export const storageConditionsSchema: JSONSchemaType<StorageConditions> = {
   $schema: 'https://json-schema.org/draft/2020-12/schema',
@@ -527,7 +528,7 @@ export const bodyNewUserSchema: JSONSchemaType<INewUser> = {
     profilePicture: { type: 'string', nullable: true, default: null },
     role: {
       type: 'integer',
-      enum: [0, 1],
+      enum: Object.values(Role),
       default: 1,
     },
     permissions: {
@@ -535,7 +536,7 @@ export const bodyNewUserSchema: JSONSchemaType<INewUser> = {
       uniqueItems: true,
       items: {
         type: 'integer',
-        enum: [0, 1, 2],
+        enum: Object.values(userPermits),
       },
       minItems: 1,
     },

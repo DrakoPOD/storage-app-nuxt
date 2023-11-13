@@ -1,9 +1,11 @@
-import { Role, Permission } from '@/types/user.d';
+import type { Permission, EnumRole } from '@/types/user.d';
 import { H3Event } from 'h3';
+
+import { Role } from '@/utils/userPermits';
 
 export const authUser = async (
   event: H3Event,
-  role: Role[] = [Role.ADMIN, Role.USER],
+  role: EnumRole[] = [Role.ADMIN, Role.USER],
   permissions: Permission | null = null,
   allowUser: string | string[] | null = null
 ) => {

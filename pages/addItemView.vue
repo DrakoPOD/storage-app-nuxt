@@ -257,7 +257,7 @@ const cleanItem = (): INewItem => {
     acquisitionDate: moment().format('YYYY-MM-DD'),
     brand: null,
     manufacturer: null,
-    laboratory: '',
+    laboratory: Laboratories.BIOLOGY,
     topics: [],
     experiments: [],
     storageConditions: null,

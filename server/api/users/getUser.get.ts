@@ -1,4 +1,3 @@
-import { Role } from '@/types/user.d';
 import { IQuery } from '@/types/api.d';
 
 export default defineEventHandler(async (event) => {

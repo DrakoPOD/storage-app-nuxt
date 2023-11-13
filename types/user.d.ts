@@ -1,16 +1,15 @@
 import { ObjectId } from 'mongodb';
 import { JwtPayload } from 'jsonwebtoken';
 
-export enum Role {
-  ADMIN = 0,
-  USER = 1,
-}
+import { Role, userPermits, specialPermits } from '../utils/userPermits';
 
-export enum Permission {
-  READ,
-  WRITE,
-  DELETE,
-}
+export type EnumRole = (typeof Role)[keyof typeof Role];
+
+export type Permission = (typeof userPermits)[keyof typeof userPermits];
+
+export type SpecialPermission =
+  (typeof specialPermits)[keyof typeof specialPermits];
+
 export interface IUser {
   _id?: ObjectId;
   email: string;
@@ -26,13 +25,13 @@ export interface IUser {
 export interface UserPayload extends JwtPayload {
   id: string;
   email: string;
-  role: Role;
+  role: EnumRole;
 }
 
 export interface userFetched {
   name: string;
   email: string;
-  role: Role;
+  role: EnumRole;
   permissions: Permission[];
   lastSession: string;
 }
@@ -47,7 +46,7 @@ export interface INewUser {
   lastName: string;
   profilePicture?: string;
   email: string;
-  role: Role;
+  role: EnumRole;
   permissions: Permission[];
 }
 
@@ -56,6 +55,6 @@ export interface IUserSession {
   profilePicture: string | null;
   name: string;
   email: string;
-  role: Role | null;
+  role: EnumRole | null;
   permissions: Permission[];
 }

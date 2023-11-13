@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 
-import { UserPayload, Role } from '@/types/user.d';
+import { UserPayload } from '@/types/user.d';
 
 export default defineEventHandler(async (event) => {
   // get Ip address
