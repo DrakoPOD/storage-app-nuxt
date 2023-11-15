@@ -6,7 +6,10 @@
       <v-icon color="error" v-else>mdi-close</v-icon>
     </template>
     <template #item.quantity="{ item }: { item: PhysicsItem }">
-      <p>{{ item.quantity.value }} {{ item.quantity.unit }}</p>
+      <p>{{ item.quantity }} </p>
+    </template>
+    <template #item.unit="{ item }: { item: PhysicsItem }">
+      <p>{{ item.unit }} </p>
     </template>
     <template #item.laboratory="{ item }: { item: PhysicsItem }">
       <p>{{ LaboratoriesNames[item.laboratory] }}</p>
@@ -90,14 +93,16 @@
       </tr>
     </template>
   </v-data-table>
-  <v-dialog persistent full-screen v-model="openDialog">
+  <v-btn @click="() => openDialog = true">Click me</v-btn>
+  <v-card v-click-outside="() => console.log('Do nothing')">asasasas</v-card>
+  <v-navigation-drawer class="drawer" permanent location="right" v-model="openDialog">
     <v-card height="100%" class="ma-0">
       <v-card-text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident asperiores repellat, unde quisquam
         nesciunt amet error vero soluta totam, reprehenderit iusto qui expedita porro magni beatae molestiae in omnis
         magnam.</v-card-text>
       <v-card-actions><v-btn @click="openDialog = false">Close</v-btn></v-card-actions>
     </v-card>
-  </v-dialog>
+  </v-navigation-drawer>
 </template>
 
 <script setup lang="ts">
@@ -127,7 +132,8 @@ type Headers = InstanceType<typeof VDataTable>['headers']
 //     b('a')
 const headers = ref<Headers>([
   { title: 'Nombre', key: 'name', align: 'start' },
-  { title: 'Cantidad', key: 'quantity', align: 'center' },
+  { title: 'Cantidad', key: 'quantity', align: 'end' },
+  { title: 'Unidad', key: 'unit', align: 'start' },
   { title: 'Laboratorio', key: 'laboratory', align: 'start' },
   { title: 'Tema', key: 'topic', align: 'start' },
   { title: 'Funcional', key: 'functional', align: 'center' },
@@ -172,5 +178,9 @@ function itemClick(e: Event, row: { item: PhysicsItem, internalItem: any }) {
 .carousel-item:hover {
   opacity: 1;
   cursor: pointer;
+}
+
+.drawer {
+  z-index: 99999 !important;
 }
 </style>

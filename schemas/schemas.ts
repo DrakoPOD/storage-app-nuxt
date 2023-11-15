@@ -129,22 +129,17 @@ export const newItemSchema: JSONSchemaType<INewItem> = {
     },
     quantity: {
       description: 'Quantity of the item',
-      type: 'object',
-      properties: {
-        unit: {
-          description: 'Unit of the item',
-          type: 'string',
-          enum: allUnitsArray,
-        },
-        unitType: {
-          type: 'string',
-          enum: ['length', 'mass', 'volume', 'temperature', 'pressure', 'unit'],
-        },
-        value: {
-          type: 'number',
-        },
-      },
-      required: ['unit', 'value', 'unitType'],
+      type: 'number',
+      minimum: 0,
+    },
+    unit: {
+      description: 'Unit of the item',
+      type: 'string',
+      enum: allUnitsArray,
+    },
+    unitType: {
+      type: 'string',
+      enum: ['length', 'mass', 'volume', 'temperature', 'pressure', 'unit'],
     },
     serialNumber: {
       description: 'Serial number of the item',
@@ -234,6 +229,8 @@ export const newItemSchema: JSONSchemaType<INewItem> = {
     'category',
     'quantity',
     'laboratory',
+    'unit',
+    'unitType',
   ],
 };
 
@@ -275,23 +272,19 @@ export const itemSchema: JSONSchemaType<Item> = {
     },
     quantity: {
       description: 'Quantity of the item',
-      type: 'object',
-      properties: {
-        unit: {
-          description: 'Unit of the item',
-          type: 'string',
-          enum: allUnitsArray,
-        },
-        unitType: {
-          type: 'string',
-          enum: ['length', 'mass', 'volume', 'temperature', 'pressure', 'unit'],
-        },
-        value: {
-          type: 'number',
-        },
-      },
-      required: ['unit', 'value', 'unitType'],
+      type: 'number',
+      minimum: 0,
     },
+    unit: {
+      description: 'Unit of the item',
+      type: 'string',
+      enum: allUnitsArray,
+    },
+    unitType: {
+      type: 'string',
+      enum: ['length', 'mass', 'volume', 'temperature', 'pressure', 'unit'],
+    },
+
     addedDate: {
       description: 'Date when the item was added',
       type: 'string',
@@ -423,6 +416,8 @@ export const itemSchema: JSONSchemaType<Item> = {
     'experiments',
     'code',
     'added_by',
+    'unit',
+    'unitType',
   ],
 };
 

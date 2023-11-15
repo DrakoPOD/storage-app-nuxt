@@ -17,7 +17,7 @@
 
         <v-col cols="12" sm="6">
           <v-select density="compact" v-model="item.category" :items="itemsTypes" item-value="key"
-            label="Tipo de artículo" @update:modelValue="() => item.quantity.unitType = unitsTypesSelect[0].key">
+            label="Tipo de artículo" @update:modelValue="() => item.unitType = unitsTypesSelect[0].key">
             <template #item="{ props, item }">
               <v-list-item v-bind="props" :subtitle="item.raw.subtitle">
               </v-list-item>
@@ -30,16 +30,15 @@
       </v-row>
       <v-row>
         <v-col cols="12" sm="4">
-          <v-select density="compact" v-model="item.quantity.unitType" :items="unitsTypesSelect" item-value="key"
-            title="title" label="Tipo de cuantificación"
-            @update:modelValue="() => item.quantity.unit = unitsSelect[0]"></v-select>
+          <v-select density="compact" v-model="item.unitType" :items="unitsTypesSelect" item-value="key" title="title"
+            label="Tipo de cuantificación" @update:modelValue="() => item.unit = unitsSelect[0]"></v-select>
         </v-col>
         <v-col cols="6" sm="4">
-          <v-text-field density="compact" type="number" v-model.number="item.quantity.value" placeholder="Ej. 42"
+          <v-text-field density="compact" type="number" v-model.number="item.quantity" placeholder="Ej. 42"
             label="Cantidad" />
         </v-col>
         <v-col cols="6" sm="4">
-          <v-select density="compact" v-model="item.quantity.unit" :items="unitsSelect" label="Unidad"></v-select>
+          <v-select density="compact" v-model="item.unit" :items="unitsSelect" label="Unidad"></v-select>
         </v-col>
       </v-row>
       <v-row>
@@ -248,11 +247,9 @@ const cleanItem = (): INewItem => {
     name: '',
     description: '',
     category: 'SEN',
-    quantity: {
-      value: 0,
-      unit: 'unit',
-      unitType: 'unit'
-    },
+    quantity: 0,
+    unit: 'unit',
+    unitType: 'unit',
     cost: 0,
     acquisitionDate: moment().format('YYYY-MM-DD'),
     brand: null,
@@ -271,7 +268,7 @@ const item = useStorage('form-item', cleanItem())
 
 const unitsTypesSelect = computed(() => ItemQuantityTypes[item.value.category])
 
-const unitsSelect = computed(() => Units[item.value.quantity.unitType])
+const unitsSelect = computed(() => Units[item.value.unitType])
 
 const file = ref<File[] | undefined>();
 const myImg = ref<string | undefined>('https://cdn.vuetifyjs.com/images/parallax/material.jpg');

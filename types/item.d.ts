@@ -41,11 +41,9 @@ export interface INewItem {
   name: string;
   description: string;
   category: EnumItemType;
-  quantity: {
-    value: number;
-    unit: AllUnits;
-    unitType: UnitTypesNames;
-  };
+  quantity: number;
+  unit: AllUnits;
+  unitType: UnitTypesNames;
   cost: number;
   acquisitionDate?: string | Date | null;
   laboratory: EnumLaboratoryType;
