@@ -1,5 +1,5 @@
 <template>
-  <v-sheet color="white" class="pa-2" width="350">
+  <v-sheet color="white" class="pa-4 d-flex justify-center" :width="svgWidth">
     <svg ref="myCode"></svg>
   </v-sheet>
 </template>
@@ -22,6 +22,16 @@ const myCode = ref<HTMLElement | null>(null);
 
 type BarcodeType = "CODE128" | "CODE128A" | "CODE128B" | "CODE128C" | "EAN13" | "EAN8" | "UPC" | "CODE39" | "ITF14" | "ITF" | "MSI" | "MSI10" | "MSI11" | "MSI1010" | "MSI1110" | "pharmacode";
 
+const svgWidth = computed({
+  set: () => { },
+  get: () => {
+    if (myCode.value !== null) {
+      return myCode.value.clientWidth + 20;
+    } else {
+      return 350;
+    }
+  }
+});
 
 var barcodeTypes: BarcodeType[] = [
   "CODE128",
