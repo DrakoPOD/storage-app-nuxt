@@ -71,7 +71,7 @@
 
         </v-col>
         <v-col cols="12" sm="6">
-          <v-select density="compact" v-model="item.laboratory" :items="labList" item-title="name" item-value="value"
+          <v-select density="compact" v-model="item.laboratory" :items="LabList" item-title="name" item-value="value"
             label="Laboratorio">
           </v-select>
         </v-col>
@@ -206,20 +206,6 @@ const needStorage = ref(false)
 
 const submitting = ref(false)
 
-const labList = ref([
-  {
-    name: 'Biología',
-    value: '1'
-  },
-  {
-    name: 'Química',
-    value: '2'
-  },
-  {
-    name: 'Física',
-    value: '3'
-  }
-])
 
 const cleanStorageCondition = (): StorageConditions => {
   return {
@@ -281,6 +267,7 @@ const submit = async () => {
   if (!valid) {
     console.log(errors)
     console.log('invalid')
+    submitting.value = false
     return
   }
   const { data, error } = await useFetch('api/item/addItem', { method: 'POST', body: item.value, watch: false })
@@ -291,6 +278,7 @@ const submit = async () => {
   }
   if (data.value) {
     console.log(data.value)
+    // item.value = cleanItem()
   }
   submitting.value = false
 }
