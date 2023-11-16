@@ -1,6 +1,9 @@
 <template>
-  <v-data-table :loading="loadingData" :headers="(headers as any)" :items="listItems" item-value="_id" expand-on-click
+  <v-data-table :loading="loadingData" :headers="(headers as any)" :items="listItems" item-value="_id"
     v-model:expanded="expandedRow" hover show-expand single-expand @click:row="itemClick">
+    <template #item.code="{ item }">
+      <pre>{{ item.code }}</pre>
+    </template>
     <template #item.functional="{ item }">
       <v-icon color="success" v-if="item.functional">mdi-check</v-icon>
       <v-icon color="error" v-else>mdi-close</v-icon>
@@ -13,6 +16,18 @@
     </template>
     <template #item.laboratory="{ item }: { item: PhysicsItem }">
       <p>{{ LaboratoriesNames[item.laboratory] }}</p>
+    </template>
+    <template #item.actions="{ item }">
+      <v-row>
+        <v-col cols="6">
+          <v-btn id="not-click" density="compact" variant="text" size="medium" icon="mdi-pencil"
+            @click="editItem"></v-btn>
+        </v-col>
+        <v-col cols="6">
+          <v-btn id="not-click" density="compact" variant="text" size="medium" icon="mdi-delete"
+            @click="deleteItem"></v-btn>
+        </v-col>
+      </v-row>
     </template>
     <template #expanded-row="{ columns, item }: { item: PhysicsItem, columns: Array<any> }">
       <tr>
@@ -37,6 +52,9 @@
             </v-col>
             <v-col cols="12" sm="8">
               <v-row>
+                <v-col cols="12" class="d-flex align-content-center justify-center">
+                  <Barcode v-model="item.code" />
+                </v-col>
                 <v-col cols="12" sm="6">
                   <div class="font-weight-black">Descripción:</div>
                   <div> {{ item.description }}</div>
@@ -94,15 +112,14 @@
     </template>
   </v-data-table>
   <v-btn @click="() => openDialog = true">Click me</v-btn>
-  <v-card v-click-outside="() => console.log('Do nothing')">asasasas</v-card>
-  <v-navigation-drawer class="drawer" permanent location="right" v-model="openDialog">
+  <v-dialog class="drawer" permanent location="right" v-model="openDialog">
     <v-card height="100%" class="ma-0">
       <v-card-text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident asperiores repellat, unde quisquam
         nesciunt amet error vero soluta totam, reprehenderit iusto qui expedita porro magni beatae molestiae in omnis
         magnam.</v-card-text>
       <v-card-actions><v-btn @click="openDialog = false">Close</v-btn></v-card-actions>
     </v-card>
-  </v-navigation-drawer>
+  </v-dialog>
 </template>
 
 <script setup lang="ts">
@@ -117,7 +134,7 @@ const loadingData = ref(true)
 
 const openDialog = ref(false)
 
-const expandedRow = ref([])
+const expandedRow = ref<string[]>([])
 
 type Headers = InstanceType<typeof VDataTable>['headers']
 
@@ -131,6 +148,7 @@ type Headers = InstanceType<typeof VDataTable>['headers']
 
 //     b('a')
 const headers = ref<Headers>([
+  { title: 'Código', key: 'code', align: 'center' },
   { title: 'Nombre', key: 'name', align: 'start' },
   { title: 'Cantidad', key: 'quantity', align: 'end' },
   { title: 'Unidad', key: 'unit', align: 'start' },
@@ -138,6 +156,7 @@ const headers = ref<Headers>([
   { title: 'Tema', key: 'topic', align: 'start' },
   { title: 'Funcional', key: 'functional', align: 'center' },
   { title: 'Marca', key: 'brand', align: 'start' },
+  { title: 'Acciones', key: 'actions', align: 'center' }
 ])
 
 const getItems = async () => {
@@ -159,13 +178,38 @@ const getItems = async () => {
 }
 
 onMounted(async () => {
-  getItems()
+  await nextTick()
+  await getItems()
 })
 
 function itemClick(e: Event, row: { item: PhysicsItem, internalItem: any }) {
-  if (expandedRow.value.length > 1) {
-    expandedRow.value.shift()
+  // console.log()
+  // don't expand if click on action buttons with id "not-click"
+  const target = e.target as HTMLElement;
+  if (target.closest('#not-click') !== null) {
+    return
   }
+
+  const rowKey: string = row.internalItem.key
+
+  if (expandedRow.value.includes(rowKey)) {
+    expandedRow.value = []
+    return
+  }
+
+  expandedRow.value = [rowKey]
+
+  // if (expandedRow.value.length > 1) {
+  //   expandedRow.value.shift()
+  // }
+}
+
+function editItem() {
+  console.log('edit')
+}
+
+function deleteItem() {
+  console.log('delete')
 }
 </script>
 
