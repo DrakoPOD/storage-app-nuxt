@@ -1,17 +1,20 @@
 <template>
-  <select>
-    <option v-for="types in barcodeTypes" :value="types">{{ types }}</option>
-  </select>
-  <svg ref="myCode"></svg>
+  <v-sheet color="white" class="pa-2" width="350">
+    <svg ref="myCode"></svg>
+  </v-sheet>
 </template>
 
 <script setup lang="ts">
-import JsBarcode from 'jsbarcode';
+import JsBarcode, { type BaseOptions } from 'jsbarcode';
 
 const props = defineProps({
   modelValue: {
     type: String,
     default: "",
+  },
+  codeType: {
+    type: String as PropType<BarcodeType>,
+    default: "CODE128",
   },
 })
 
@@ -20,7 +23,7 @@ const myCode = ref<HTMLElement | null>(null);
 type BarcodeType = "CODE128" | "CODE128A" | "CODE128B" | "CODE128C" | "EAN13" | "EAN8" | "UPC" | "CODE39" | "ITF14" | "ITF" | "MSI" | "MSI10" | "MSI11" | "MSI1010" | "MSI1110" | "pharmacode";
 
 
-var barcodeTypes = [
+var barcodeTypes: BarcodeType[] = [
   "CODE128",
   "CODE128A",
   "CODE128B",
@@ -39,8 +42,8 @@ var barcodeTypes = [
   "pharmacode"
 ];
 
-const options = {
-  format: "CODE128",
+const options: BaseOptions = {
+  format: barcodeTypes.includes(props.codeType) ? props.codeType : "CODE128",
   displayValue: true,
   fontSize: 18,
   width: 3,
@@ -53,7 +56,7 @@ const options = {
   marginRight: 0,
   background: "#ffffff",
   lineColor: "#000000",
-  flat: true,
+  // flat: true,
 };
 
 onMounted(() => {
